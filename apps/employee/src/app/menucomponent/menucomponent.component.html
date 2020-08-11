@@ -1,0 +1,38 @@
+<nav class="navbar navbar-expand navbar-dark bg-dark osahan-nav-top p-0">
+    <div style="float:left; padding-left:125px; color:aliceblue; font-weight: bold; font-size: 14px;">Facehiring</div>
+     <div class="container">
+        <ul class="navbar-nav ml-auto d-flex align-items-center">
+          <li class="nav-item">
+            <a class="nav-link" href="/employee"><i class="feather-briefcase mr-2"></i><span class="d-none d-lg-inline">Home</span></a>
+         </li>  
+          <li class="nav-item"*ngIf=" isEditProfileRequired">
+            <a class="nav-link" href="/employee/manageJob"><i class="feather-briefcase mr-2"></i><span class="d-none d-lg-inline">Manage Job Postings</span></a>
+         </li>
+
+         <!-- Nav Item - User Information -->
+         <li class="nav-item dropdown no-arrow ml-1 osahan-profile-dropdown" *ngIf="isEditProfileRequired">
+            <a class="nav-link dropdown-toggle pr-0" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            <img class="img-profile rounded-circle" src="assets/img/p13.png">
+            </a>
+            <!-- Dropdown - User Information -->
+            <div class="dropdown-menu dropdown-menu-right shadow-sm">
+               <div class="p-3 d-flex align-items-center">
+                  <div class="dropdown-list-image mr-3">
+                     <img class="rounded-circle" src="assets/img/p1.png" alt="">
+                     <div class="status-indicator bg-success"></div>
+                  </div>
+               </div>
+               <div class="dropdown-divider"></div>
+               <a class="dropdown-item" href="/"><i class="feather-edit mr-1"></i> Home</a>
+               <a class="dropdown-item" href="/employee/editprofile"><i class="feather-user mr-1"></i> Edit Profile</a>
+               <a class="dropdown-item" href="/employee/changePassword"><i class="feather-user mr-1"></i> Change Password</a>
+               <div class="dropdown-divider"></div>
+               <a class="dropdown-item" href="#" (click)="logout(); false;"><i class="feather-log-out mr-1"></i> Logout</a>
+            </div>
+         </li>
+
+       </ul>
+
+     </div>
+     <div id ="menuWaitDialog" style="display: none;"></div>
+  </nav>

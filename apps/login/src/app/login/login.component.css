@@ -1,0 +1,17 @@
+.registration-login-form{
+    min-height:350px !important;
+  }
+  .landing-content{
+    min-height:350px !important;
+  }
+  .btn-md{
+    font-size: 0.85rem;
+  }
+  .forgotClass a {
+    color: #007bff;
+    text-decoration: none;
+    background-color: transparent;
+  }
+  .forgotClass{
+    float: right; margin-right: 15px;
+  }

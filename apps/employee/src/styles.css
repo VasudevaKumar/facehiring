@@ -1,0 +1,96 @@
+/* You can add global styles to this file, and also import other style files */
+/* You can add global styles to this file, and also import other style files */
+@import "~@angular/material/prebuilt-themes/indigo-pink.css";
+@import "~ag-grid-community/dist/styles/ag-grid.css";
+@import "~ag-grid-community/dist/styles/ag-theme-balham.css";
+
+/*
+.ag-theme-alpine {
+    @include ag-theme-alpine();
+}
+*/
+
+.autocomplete-container{
+    height: calc(1.5em + .75rem + 2px) !important;;
+}
+.input-container input{
+    height: calc(1.5em + .75rem + 2px) !important;;
+    border: 1px solid #ced4da !important;
+}
+.suggestions-container ul li a {
+    padding: 4px 15px !important;
+    display: block;
+    text-decoration: none;
+    cursor: pointer;
+    color: rgba(0,0,0,.87);
+    font-size: 12px !important;
+}
+.warning-block{
+    width: 100%;
+    margin-top: .25rem;
+    font-size: 80%;
+    color: #dc3545
+}
+.dropdown-list ul li{
+    padding:4px !important;
+}
+/*
+.iconpanel, .messagepanel{
+    height:80px !important
+}
+*/
+
+.alertsContainer .alertsRow.success .iconpanel{
+    height:80px !important
+}
+.alertsContainer .alertsRow.success .messagepanel{
+    height:80px !important
+}
+.alertsContainer .alertsRow.error .iconpanel{
+    height:60px !important
+}
+.alertsContainer .alertsRow.error .messagepanel{
+    height:60px !important
+}
+.alertsContainer .alertsRow.warn .iconpanel{
+    height:60px !important
+}
+.alertsContainer .alertsRow.warn .messagepanel{
+    height:60px !important
+}
+.cursorHand{
+    cursor: pointer !important;
+}
+.defaultHeight{
+    height: 10px;
+    min-height: 10px;
+}
+.mt-10{
+    margin-top: 10px;
+}
+.nogutter{
+    margin:0px !important;
+    padding:0px !important;
+}
+.ag-header-viewport{
+    background-color:lightgrey !important;
+}
+.ag-theme-balham{
+    font-size: 13px !important;
+}
+.fa-sm {
+    font-size:1.43em;
+}
+.all-listing-flex-container {
+  display: flex;
+  flex-wrap: nowrap;
+}
+
+.all-listing-flex-container > div {
+  background-color: #f1f1f1;
+  width: 125px;
+  margin: 0px 0px 0px 5px;
+  text-align: center;
+  line-height: 15px;
+  font-size: 12px;
+}

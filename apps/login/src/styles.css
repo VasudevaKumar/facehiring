@@ -1,0 +1,23 @@
+/* You can add global styles to this file, and also import other style files */
+
+.alertsContainer .alertsRow.success .iconpanel{
+    height:80px !important
+}
+.alertsContainer .alertsRow.success .messagepanel{
+    height:80px !important
+}
+.alertsContainer .alertsRow.error .iconpanel{
+    height:60px !important
+}
+.alertsContainer .alertsRow.error .messagepanel{
+    height:60px !important
+}
+.alertsContainer .alertsRow.warn .iconpanel{
+    height:60px !important
+}
+.alertsContainer .alertsRow.warn .messagepanel{
+    height:60px !important
+}
+.cursorHand{
+    cursor: hand !important;
+}

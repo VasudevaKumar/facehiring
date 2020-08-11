@@ -1,0 +1,456 @@
+{
+  "version": 1,
+  "projects": {
+    "login": {
+      "projectType": "application",
+      "schematics": {},
+      "root": "apps/login",
+      "sourceRoot": "apps/login/src",
+      "prefix": "facehiring",
+      "architect": {
+        "build": {
+          "builder": "@angular-devkit/build-angular:browser",
+          "options": {
+            "outputPath": "dist/apps/login",
+            "index": "apps/login/src/index.html",
+            "main": "apps/login/src/main.ts",
+            "polyfills": "apps/login/src/polyfills.ts",
+            "tsConfig": "apps/login/tsconfig.app.json",
+            "aot": true,
+            "assets": [
+              "apps/login/src/favicon.ico",
+              "apps/login/src/assets"
+            ],
+            "styles": [
+              "apps/login/src/styles.css"
+            ],
+            "scripts": []
+          },
+          "configurations": {
+            "production": {
+              "fileReplacements": [
+                {
+                  "replace": "./environments/environment.ts",
+                  "with": "./environments/environment.prod.ts"
+                }
+              ],
+              "optimization": true,
+              "outputHashing": "all",
+              "sourceMap": false,
+              "extractCss": true,
+              "namedChunks": false,
+              "extractLicenses": true,
+              "vendorChunk": false,
+              "buildOptimizer": true,
+              "budgets": [
+                {
+                  "type": "initial",
+                  "maximumWarning": "2mb",
+                  "maximumError": "5mb"
+                },
+                {
+                  "type": "anyComponentStyle",
+                  "maximumWarning": "6kb",
+                  "maximumError": "10kb"
+                }
+              ]
+            }
+          }
+        },
+        "serve": {
+          "builder": "@angular-devkit/build-angular:dev-server",
+          "options": {
+            "browserTarget": "login:build"
+          },
+          "configurations": {
+            "production": {
+              "browserTarget": "login:build:production"
+            }
+          }
+        },
+        "extract-i18n": {
+          "builder": "@angular-devkit/build-angular:extract-i18n",
+          "options": {
+            "browserTarget": "login:build"
+          }
+        },
+        "lint": {
+          "builder": "@angular-devkit/build-angular:tslint",
+          "options": {
+            "tsConfig": [
+              "apps/login/tsconfig.app.json",
+              "apps/login/tsconfig.spec.json"
+            ],
+            "exclude": [
+              "**/node_modules/**",
+              "!apps/login/**/*"
+            ]
+          }
+        },
+        "test": {
+          "builder": "@nrwl/jest:jest",
+          "options": {
+            "jestConfig": "apps/login/jest.config.js",
+            "tsConfig": "apps/login/tsconfig.spec.json",
+            "passWithNoTests": true,
+            "setupFile": "apps/login/src/test-setup.ts"
+          }
+        }
+      }
+    },
+    "login-e2e": {
+      "root": "apps/login-e2e",
+      "sourceRoot": "apps/login-e2e/src",
+      "projectType": "application",
+      "architect": {
+        "e2e": {
+          "builder": "@nrwl/cypress:cypress",
+          "options": {
+            "cypressConfig": "apps/login-e2e/cypress.json",
+            "tsConfig": "apps/login-e2e/tsconfig.e2e.json",
+            "devServerTarget": "login:serve"
+          },
+          "configurations": {
+            "production": {
+              "devServerTarget": "login:serve:production"
+            }
+          }
+        },
+        "lint": {
+          "builder": "@angular-devkit/build-angular:tslint",
+          "options": {
+            "tsConfig": [
+              "apps/login-e2e/tsconfig.e2e.json"
+            ],
+            "exclude": [
+              "**/node_modules/**",
+              "!apps/login-e2e/**/*"
+            ]
+          }
+        }
+      }
+    },
+    "profile": {
+      "projectType": "application",
+      "schematics": {},
+      "root": "apps/profile",
+      "sourceRoot": "apps/profile/src",
+      "prefix": "facehiring",
+      "architect": {
+        "build": {
+          "builder": "@angular-devkit/build-angular:browser",
+          "options": {
+            "outputPath": "dist/apps/profile",
+            "index": "apps/profile/src/index.html",
+            "main": "apps/profile/src/main.ts",
+            "polyfills": "apps/profile/src/polyfills.ts",
+            "tsConfig": "apps/profile/tsconfig.app.json",
+            "aot": true,
+            "assets": [
+              "apps/profile/src/favicon.ico",
+              "apps/profile/src/assets",
+              "apps/profile/src/json-dir"
+            ],
+            "styles": [
+              "./node_modules/ngx-bootstrap/datepicker/bs-datepicker.css",
+              "./node_modules/intl-tel-input/build/css/intlTelInput.css",
+              "apps/profile/src/styles.css"
+            ],
+            "scripts": []
+          },
+          "configurations": {
+            "production": {
+              "fileReplacements": [
+                {
+                  "replace": "apps/profile/src/environments/environment.ts",
+                  "with": "apps/profile/src/environments/environment.prod.ts"
+                }
+              ],
+              "optimization": true,
+              "outputHashing": "all",
+              "sourceMap": false,
+              "extractCss": true,
+              "namedChunks": false,
+              "extractLicenses": true,
+              "vendorChunk": false,
+              "buildOptimizer": true,
+              "budgets": [
+                {
+                  "type": "initial",
+                  "maximumWarning": "2mb",
+                  "maximumError": "5mb"
+                },
+                {
+                  "type": "anyComponentStyle",
+                  "maximumWarning": "6kb",
+                  "maximumError": "10kb"
+                }
+              ]
+            }
+          }
+        },
+        "serve": {
+          "builder": "@angular-devkit/build-angular:dev-server",
+          "options": {
+            "browserTarget": "profile:build"
+          },
+          "configurations": {
+            "production": {
+              "browserTarget": "profile:build:production"
+            }
+          }
+        },
+        "extract-i18n": {
+          "builder": "@angular-devkit/build-angular:extract-i18n",
+          "options": {
+            "browserTarget": "profile:build"
+          }
+        },
+        "lint": {
+          "builder": "@angular-devkit/build-angular:tslint",
+          "options": {
+            "tsConfig": [
+              "apps/profile/tsconfig.app.json",
+              "apps/profile/tsconfig.spec.json"
+            ],
+            "exclude": [
+              "**/node_modules/**",
+              "!apps/profile/**/*"
+            ]
+          }
+        },
+        "test": {
+          "builder": "@nrwl/jest:jest",
+          "options": {
+            "jestConfig": "apps/profile/jest.config.js",
+            "tsConfig": "apps/profile/tsconfig.spec.json",
+            "passWithNoTests": true,
+            "setupFile": "apps/profile/src/test-setup.ts",
+            "styles": [
+              "./node_modules/bootstrap/dist/css/bootstrap.min.css",
+              "./node_modules/ngx-bootstrap/datepicker/bs-datepicker.css"
+            ]
+          }
+        }
+      }
+    },
+    "profile-e2e": {
+      "root": "apps/profile-e2e",
+      "sourceRoot": "apps/profile-e2e/src",
+      "projectType": "application",
+      "architect": {
+        "e2e": {
+          "builder": "@nrwl/cypress:cypress",
+          "options": {
+            "cypressConfig": "apps/profile-e2e/cypress.json",
+            "tsConfig": "apps/profile-e2e/tsconfig.e2e.json",
+            "devServerTarget": "profile:serve"
+          },
+          "configurations": {
+            "production": {
+              "devServerTarget": "profile:serve:production"
+            }
+          }
+        },
+        "lint": {
+          "builder": "@angular-devkit/build-angular:tslint",
+          "options": {
+            "tsConfig": [
+              "apps/profile-e2e/tsconfig.e2e.json"
+            ],
+            "exclude": [
+              "**/node_modules/**",
+              "!apps/profile-e2e/**/*"
+            ]
+          }
+        }
+      }
+    },
+    "headerwithoutsearch": {
+      "projectType": "library",
+      "root": "libs/headerwithoutsearch",
+      "sourceRoot": "libs/headerwithoutsearch/src",
+      "prefix": "facehiring",
+      "architect": {
+        "lint": {
+          "builder": "@angular-devkit/build-angular:tslint",
+          "options": {
+            "tsConfig": [
+              "libs/headerwithoutsearch/tsconfig.lib.json",
+              "libs/headerwithoutsearch/tsconfig.spec.json"
+            ],
+            "exclude": [
+              "**/node_modules/**",
+              "!libs/headerwithoutsearch/**/*"
+            ]
+          }
+        },
+        "test": {
+          "builder": "@nrwl/jest:jest",
+          "options": {
+            "jestConfig": "libs/headerwithoutsearch/jest.config.js",
+            "tsConfig": "libs/headerwithoutsearch/tsconfig.spec.json",
+            "passWithNoTests": true,
+            "setupFile": "libs/headerwithoutsearch/src/test-setup.ts"
+          }
+        }
+      },
+      "schematics": {}
+    },
+    "employee": {
+      "projectType": "application",
+      "schematics": {},
+      "root": "apps/employee",
+      "sourceRoot": "apps/employee/src",
+      "prefix": "facehiring",
+      "architect": {
+        "build": {
+          "builder": "@angular-devkit/build-angular:browser",
+          "options": {
+            "outputPath": "dist/apps/employee",
+            "index": "apps/employee/src/index.html",
+            "main": "apps/employee/src/main.ts",
+            "polyfills": "apps/employee/src/polyfills.ts",
+            "tsConfig": "apps/employee/tsconfig.app.json",
+            "aot": true,
+            "assets": [
+              "apps/employee/src/favicon.ico",
+              "apps/employee/src/assets"
+            ],
+            "styles": [
+              "node_modules/bootstrap/dist/css/bootstrap.min.css",
+              "./node_modules/ngx-bootstrap/datepicker/bs-datepicker.css",
+              "./node_modules/intl-tel-input/build/css/intlTelInput.css",
+              "./node_modules/font-awesome/css/font-awesome.css",
+              "apps/employee/src/styles.css",
+              "apps/employee/src/assets/vendor/slick/slick.min.css",
+              "apps/employee/src/assets/vendor/slick/slick-theme.min.css",
+              "apps/employee/src/assets/vendor/icons/feather.css",
+              "apps/employee/src/assets/vendor/bootstrap/css/bootstrap.min.css",
+              "apps/employee/src/assets/css/style.css"
+            ],
+            "scripts": [
+              "apps/employee/src/assets/vendor/bootstrap/js/bootstrap.bundle.min.js",
+              "apps/employee/src/assets/vendor/slick/slick.min.js",
+              "apps/employee/src/assets/js/osahan.js"
+            ]
+          },
+          "configurations": {
+            "production": {
+              "fileReplacements": [
+                {
+                  "replace": "./environments/environment.ts",
+                  "with": "./environments/environment.prod.ts"
+                }
+              ],
+              "optimization": true,
+              "outputHashing": "all",
+              "sourceMap": false,
+              "extractCss": true,
+              "namedChunks": false,
+              "extractLicenses": true,
+              "vendorChunk": false,
+              "buildOptimizer": true,
+              "budgets": [
+                {
+                  "type": "initial",
+                  "maximumWarning": "2mb",
+                  "maximumError": "5mb"
+                },
+                {
+                  "type": "anyComponentStyle",
+                  "maximumWarning": "6kb",
+                  "maximumError": "10kb"
+                }
+              ]
+            }
+          }
+        },
+        "serve": {
+          "builder": "@angular-devkit/build-angular:dev-server",
+          "options": {
+            "browserTarget": "employee:build"
+          },
+          "configurations": {
+            "production": {
+              "browserTarget": "employee:build:production"
+            }
+          }
+        },
+        "extract-i18n": {
+          "builder": "@angular-devkit/build-angular:extract-i18n",
+          "options": {
+            "browserTarget": "employee:build"
+          }
+        },
+        "lint": {
+          "builder": "@angular-devkit/build-angular:tslint",
+          "options": {
+            "tsConfig": [
+              "apps/employee/tsconfig.app.json",
+              "apps/employee/tsconfig.spec.json"
+            ],
+            "exclude": [
+              "**/node_modules/**",
+              "!apps/employee/**/*"
+            ]
+          }
+        },
+        "test": {
+          "builder": "@nrwl/jest:jest",
+          "options": {
+            "jestConfig": "apps/employee/jest.config.js",
+            "tsConfig": "apps/employee/tsconfig.spec.json",
+            "passWithNoTests": true,
+            "setupFile": "apps/employee/src/test-setup.ts"
+          }
+        }
+      }
+    },
+    "employee-e2e": {
+      "root": "apps/employee-e2e",
+      "sourceRoot": "apps/employee-e2e/src",
+      "projectType": "application",
+      "architect": {
+        "e2e": {
+          "builder": "@nrwl/cypress:cypress",
+          "options": {
+            "cypressConfig": "apps/employee-e2e/cypress.json",
+            "tsConfig": "apps/employee-e2e/tsconfig.e2e.json",
+            "devServerTarget": "employee:serve"
+          },
+          "configurations": {
+            "production": {
+              "devServerTarget": "employee:serve:production"
+            }
+          }
+        },
+        "lint": {
+          "builder": "@angular-devkit/build-angular:tslint",
+          "options": {
+            "tsConfig": [
+              "apps/employee-e2e/tsconfig.e2e.json"
+            ],
+            "exclude": [
+              "**/node_modules/**",
+              "!apps/employee-e2e/**/*"
+            ]
+          }
+        }
+      }
+    }
+  },
+  "cli": {
+    "defaultCollection": "@nrwl/angular"
+  },
+  "schematics": {
+    "@nrwl/angular:application": {
+      "unitTestRunner": "jest",
+      "e2eTestRunner": "cypress"
+    },
+    "@nrwl/angular:library": {
+      "unitTestRunner": "jest"
+    }
+  },
+  "defaultProject": "profile"
+}

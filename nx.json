@@ -1,0 +1,56 @@
+{
+  "npmScope": "facehiring",
+  "implicitDependencies": {
+    "angular.json": "*",
+    "package.json": {
+      "dependencies": "*",
+      "devDependencies": "*"
+    },
+    "tsconfig.json": "*",
+    "tslint.json": "*",
+    "nx.json": "*"
+  },
+  "tasksRunnerOptions": {
+    "default": {
+      "runner": "@nrwl/workspace/tasks-runners/default",
+      "options": {
+        "cacheableOperations": ["build", "lint", "test", "e2e"]
+      }
+    }
+  },
+  "projects": {
+    "login": {
+      "tags": []
+    },
+    "login-e2e": {
+      "tags": [],
+      "implicitDependencies": ["login"]
+    },
+    "profile": {
+      "tags": []
+    },
+    "profile-e2e": {
+      "tags": [],
+      "implicitDependencies": ["profile"]
+    },
+    "header": {
+      "tags": []
+    },
+    "headerwithoutsearch": {
+      "tags": []
+    },
+    "headerwithsearch": {
+      "tags": []
+    },
+    "topsection": {
+      "tags": []
+    },
+    "employee": {
+      "tags": []
+    },
+    "employee-e2e": {
+      "tags": [],
+      "implicitDependencies": ["employee"]
+    }
+  }
+}
