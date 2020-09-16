@@ -2,14 +2,15 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { first } from 'rxjs/operators';
-import { AlertService } from './../_services';
-import { ConfirmPasswordValidator } from './../_validators/confirm-password.validator';
 import { CommonService } from '../_services/common.service';
 import { RegisterService } from '../_services/register.service';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import months from './../_helpers/months.json';
 import dates from './../_helpers/dates.json';
 import { SearchCountryField, TooltipLabel, CountryISO } from 'ngx-intl-tel-input';
+import { ConfirmationDialogService } from './../confirmation-dialog-component/confirmation-dialog-service';
+import { NgxSpinnerService } from "ngx-spinner";
+import { AlertsService } from 'angular-alert-module';
 
 
 declare var jQuery: any;
@@ -21,7 +22,7 @@ declare var $: any;
   selector: 'facehiring-editprofilecomponent',
   templateUrl: './editprofilecomponent.component.html',
   styleUrls: ['./editprofilecomponent.component.css'],
-  providers: [CommonService]
+  providers: [CommonService , ConfirmationDialogService]
 
 })
 export class EditprofilecomponentComponent implements OnInit {
@@ -77,28 +78,21 @@ export class EditprofilecomponentComponent implements OnInit {
     constructor(
         private formBuilder: FormBuilder,
         private router: Router,
-        //  private authenticationService: AuthenticationService,
-        // private userService: UserService,
-        private alertService: AlertService,
+        private spinner: NgxSpinnerService,
+        private alerts: AlertsService,
         private CommonService_: CommonService,
-        private RegisterService_:RegisterService
+        private RegisterService_:RegisterService,
+        private confirmationDialogService: ConfirmationDialogService
         
     ) {
         // redirect to home if already logged in
     }
 
     ngOnInit() {
-        
-        // this.getLoations();
-        // this.getPositions();
-        // this.getCompanies();
-        // this.getskills();
-        this.currentUser = JSON.parse(localStorage.getItem('currentUser'));
-        // console.log(this.currentUser['data'][0].id);
-
+       this.currentUser = JSON.parse(localStorage.getItem('currentUser'));
+       this.loggedInEmployeeID  = this.currentUser[0].user_id;
        this.myFunction();
-       // this.loggedInEmployeeID  = this.currentUser['data'][0].id;
-       this.loggedInEmployeeID  = 63;
+       // this.loggedInEmployeeID  = 63;
         this.getEmployeeProfile(this.loggedInEmployeeID);
 
        //  this.selectedSkillItems = [];
@@ -116,9 +110,7 @@ export class EditprofilecomponentComponent implements OnInit {
                     Validators.pattern(/^([a-zA-Z]+\s)*[a-zA-Z]+$/)
                 ]
             ],
-            password: [],
-            confirmPassword:[],
-                birthDateMonth : 
+               birthDateMonth : 
                 [
                     '',[Validators.required]
                 ],
@@ -133,13 +125,6 @@ export class EditprofilecomponentComponent implements OnInit {
                 birthDateGender : 
                 [
                     '',[Validators.required]
-                ],
-                emailAddress: ['', 
-                        [
-                            Validators.required, 
-                            Validators.email,
-                            Validators.pattern('^[a-z0-9._%+-]+@[a-z0-9.-]+\\.[a-z]{2,4}$')
-                        ]
                 ],
                 organization: ['',
                     [
@@ -243,9 +228,9 @@ export class EditprofilecomponentComponent implements OnInit {
             const width = img.naturalWidth;
             const height = img.naturalHeight;
             window.URL.revokeObjectURL( img.src );
-            console.log(width + '*' + height);
+            // console.log(width + '*' + height);
 
-                console.log(event.target);
+               // console.log(event.target);
                 this.ImageSizeerror = false;
 
                 var canvas=document.createElement("canvas");
@@ -325,36 +310,38 @@ export class EditprofilecomponentComponent implements OnInit {
     onSubmit() {
             this.submitted = true;
            this.showSkillErrorMessage = true;
+           
+
          if(this.selectedSkillItems.length == 0)
           {
             this.showSkillErrorMessage = true;  
+             window.scrollTo({ top: 0, behavior: 'smooth' });
             return;
           } else {
             this.showSkillErrorMessage = false;
           }
 
-          console.log(this.slectedSkillItemString);
+          // console.log(this.slectedSkillItemString);
 
          
             if (this.EditForm.invalid) {
-                console.log('here');
-                this.findInvalidControls();
+              //  console.log('here');
+              window.scrollTo({ top: 0, behavior: 'smooth' });
+                //this.findInvalidControls();
             return;
             }
            
-            this.openwaitdialog('<img src="assets/img/loading.gif">',200);
+          this.spinner.show();
 
-           console.log(this.EditForm.value);
+//            console.log(this.EditForm.value);
            const formData = new FormData();
           
            formData.append('firstName', this.EditForm.value.firstName);
            formData.append('lastName', this.EditForm.value.lastName);
-           formData.append('password', this.EditForm.value.password);
            formData.append('birthDateMonth', this.EditForm.value.birthDateMonth);
            formData.append('birthDateDate', this.EditForm.value.birthDateDate);
            formData.append('birthDateYear', this.EditForm.value.birthDateYear);
            formData.append('birthDateGender', this.EditForm.value.birthDateGender);
-           formData.append('emailAddress', this.EditForm.value.emailAddress);
            formData.append('organization', this.EditForm.value.organization);
            formData.append('website', this.EditForm.value.website);
            formData.append('phoneNumber', this.EditForm.value.phoneNumber.internationalNumber);
@@ -394,18 +381,27 @@ export class EditprofilecomponentComponent implements OnInit {
 
                if(resp.status_code == '201')
               {
-                this.closewaitdialog(); 
-                this.openwaitdialog(resp.message, 600); 
-                this.closewaitdialog();  
+                this.spinner.hide();
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+                this.alerts.setDefaults('timeout',500);
+                this.alerts.setMessage(resp.message,'error');
+
                 $("#primaryPhoneNumber").val('');
                 $("#phoneAvailability").html(resp.message);
                 $("#phoneAvailability").show();
+                return;
+
 
               } 
               else {
-                $('#waitDialog').dialog('close');
-                this.openwaitdialog('Your details has been updated', 400);
-                this.closewaitdialog();
+                this.spinner.hide();
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+                $('.alertsContainer .alertsRow.error').attr("style", "display: none !important");
+                this.alerts.setMessage('You profile details has been updated! Please wait ..' ,'success');
+
+                setTimeout(function(){
+                    _that.router.navigate(['/']);
+                   }, 2000);
               }
 
                 
@@ -420,7 +416,20 @@ export class EditprofilecomponentComponent implements OnInit {
     }
     showFlashMsg(respMsg , type)
     {
-        console.log(respMsg);
+        // console.log(respMsg);
+    }
+
+    redictedtoHomePage()
+    {
+        const _that = this;
+        setTimeout(function(){
+            $('#waitDialog').dialog('close');
+        }, 5000);
+
+        setTimeout(function(){
+            _that.router.navigate(['/']);
+           }, 10000);
+
     }
 
     /* Auto completes */
@@ -555,9 +564,9 @@ export class EditprofilecomponentComponent implements OnInit {
       .subscribe(employeeProfiles => (_that.employeeProfiles = employeeProfiles))
       .add(() => {
         /*console.log(_that.employeeProfiles['profileData'][0].firstName);*/
-        console.log(_that.employeeProfiles);
+       //  console.log(_that.employeeProfiles);
         this.assignEmployeeDetails();
-        console.log(_that.employeeProfiles['userSocialLinks']);
+        // console.log(_that.employeeProfiles['userSocialLinks']);
 
       });
 
@@ -576,7 +585,6 @@ export class EditprofilecomponentComponent implements OnInit {
         this.EditForm.controls["birthDateMonth"].setValue(dobArray[1]);
         this.EditForm.controls["birthDateDate"].setValue(dobArray[2]);
         this.EditForm.controls["birthDateGender"].setValue(_that.employeeProfiles['profileData'][0].gender);
-        this.EditForm.controls["emailAddress"].setValue(_that.employeeProfiles['profileData'][0].emailAddress);
         this.EditForm.controls["ddlLocation"].setValue(_that.employeeProfiles['profileData'][0].locationName);
         this.selectedLocation = _that.employeeProfiles['profileData'][0].locationID;
         this.EditForm.controls["organization"].setValue(_that.employeeProfiles['profileData'][0].organization);
@@ -607,46 +615,6 @@ export class EditprofilecomponentComponent implements OnInit {
 
     }
 
-    openwaitdialog(loadingMessage: any = 'Loading', defaultWidth: any = 350) {
-        // tslint:disable-next-line: max-line-length
-        $('#waitDialog').html('<div><span style="margin-left:5px;">' + loadingMessage + ', please wait...</span></div>');
-        $('#waitDialog').dialog({
-         modal: true,
-         // title: 'Please wait',
-          zIndex: 10000,
-          maxWidth: defaultWidth,
-          maxHeight: 85,
-          width: defaultWidth,
-          height: 85,
-          resizable: false,
-          dialogClass: 'no-titlebar'
-        });
-      }
-      closewaitdialog() {
-        setTimeout(function(){
-            $('#waitDialog').dialog('close');
-        }, 10000);
-        
-      }
-      
-      openwaitdialogWait(loadingMessage: any = 'Loading', defaultWidth: any = 350) {
-        // tslint:disable-next-line: max-line-length
-        setTimeout(function(){
-        $('#waitDialog').html('<div>' + loadingMessage + ', please wait...</div>');
-        $('#waitDialog').dialog({
-         modal: true,
-         // title: 'Please wait',
-          zIndex: 10000,
-          maxWidth: defaultWidth,
-          maxHeight: 100,
-          width: defaultWidth,
-          height: 100,
-          resizable: false,
-          dialogClass: 'no-titlebar'
-        });
-        }, 1000);
-      }
-
 
       public findInvalidControls() {
         const invalid = [];
@@ -656,7 +624,7 @@ export class EditprofilecomponentComponent implements OnInit {
                 invalid.push(name);
             }
         }
-        console.log(invalid);
+        // console.log(invalid);
     }
 
     verifyEmailAvailability(emailAddress)
@@ -666,7 +634,7 @@ export class EditprofilecomponentComponent implements OnInit {
         this.RegisterService_
             .verifyEmailAvailabilityForEdit(emailAddress , this.loggedInEmployeeID)
             .subscribe((resp) => {
-                console.log(resp.length);
+               //  console.log(resp.length);
             if(resp.length>0)
             {
                 $("#emailAddress").val('');
@@ -684,6 +652,14 @@ export class EditprofilecomponentComponent implements OnInit {
     hidePhoneAvailability()
     {
        $("#phoneAvailability").hide();
+    }
+
+    cancelRegForm()
+    {
+     this.confirmationDialogService.confirm('Please confirm..', 'Do you want to cancel')
+    .then((confirmed) => {if(confirmed){ this.router.navigate(['/']); }})
+    .catch(() => console.log('User dismissed the dialog (e.g., by using ESC, clicking the cross icon, or clicking outside the dialog)'));
+
     }
 
 

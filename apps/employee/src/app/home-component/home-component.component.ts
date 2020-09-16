@@ -37,7 +37,6 @@ export class HomeComponentComponent implements OnInit {
   imageChangedEvent: any = '';
   imageChangedEventR:any = '';
   croppedImage: any = '';
-
   HomPageForm: FormGroup;
 
   public currentUser:any;
@@ -49,6 +48,7 @@ export class HomeComponentComponent implements OnInit {
   fileToReturn:any;
   data:any;
   imageSrcLeft: string;
+  loggedInCompanyID:any;
 
   constructor(
     private formBuilder: FormBuilder,
@@ -88,9 +88,15 @@ export class HomeComponentComponent implements OnInit {
       .add(() => {
         /*console.log(_that.employeeProfiles['profileData'][0].firstName);*/
           // console.log(_that.employeeProfiles);
-          this.imageSrcLeft = this.employeeProfiles[0]['companyProfilePicture'];
+          localStorage.setItem('companyID', this.employeeProfiles[0]['companyID']);
+          if(this.employeeProfiles.length > 0)
+          {
+            this.imageSrcLeft = this.employeeProfiles[0]['companyProfilePicture'];
+          }
           this.isEmployeeProfileLoaded = true;
-          this.loadCompanyContent(employeeID);
+          this.loggedInCompanyID = this.employeeProfiles[0]['companyID'];
+
+          this.loadCompanyContent(this.loggedInCompanyID);
 
       });
 
@@ -155,7 +161,7 @@ export class HomeComponentComponent implements OnInit {
       });
   
       
-      this.HrserviceService_.pushUpdates(this.loggedInEmployeeID , commentNotes).toPromise();
+      this.HrserviceService_.pushUpdates(this.loggedInCompanyID , commentNotes).toPromise();
       this.clearValue(event);
 
     }
@@ -168,7 +174,7 @@ export class HomeComponentComponent implements OnInit {
       created_at:new Date()
       });
 
-      this.HrserviceService_.pushCareer(this.loggedInEmployeeID , careerDetail).toPromise();
+      this.HrserviceService_.pushCareer(this.loggedInCompanyID , careerDetail).toPromise();
       this.clearValue(event);
       
 

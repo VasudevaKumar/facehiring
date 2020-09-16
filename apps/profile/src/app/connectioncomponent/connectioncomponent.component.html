@@ -4,7 +4,19 @@
           <!-- Main Content -->
           <main class="col col-xl-9 order-xl-2 col-lg-12 order-lg-1 col-md-12 col-sm-12 col-12">
              <div class="box shadow-sm border rounded bg-white mb-3 osahan-share-post">
-                <h5 class="pl-3 pt-3 pr-3 border-bottom mb-0 pb-3">More suggestions for you</h5>
+                <div class="pl-3 pt-3 pr-3 border-bottom mb-0 pb-3">
+                      <!-- More suggestions for you -->
+                      <form class="job-search p-3 border-bottom">
+                        <div class="input-group">
+                           <input type="text" id="searchString" class="form-control" placeholder="More suggestions for you" aria-label="Search" aria-describedby="basic-addon2" (keydown.enter)="filterConnects(); false;" (change)="filterConnects(); false;" (blur)="filterConnects(); false;">
+                           <div class="input-group-append">
+                              <button class="btn btn-outline-secondary" type="button" (click)="filterConnects(); false;">
+                              <i class="feather-search"></i>
+                              </button>
+                           </div>
+                        </div>
+                     </form>
+                  </div>
                 <ul class="nav border-bottom osahan-line-tab" id="myTab" role="tablist">
                    <li class="nav-item">
                       <a class="nav-link active" id="home-tab" data-toggle="tab" href="#home" role="tab" aria-controls="home" aria-selected="true">People</a>
@@ -12,27 +24,34 @@
                    <li class="nav-item">
                       <a class="nav-link" id="profile-tab" data-toggle="tab" href="#profile" role="tab" aria-controls="profile" aria-selected="false">Groups</a>
                    </li>
-                   <li class="nav-item">
+                  <!-- <li class="nav-item">
                       <a class="nav-link" id="contact-tab" data-toggle="tab" href="#contact" role="tab" aria-controls="contact" aria-selected="false">Pages</a>
-                   </li>
+                   </li> -->
                    <li class="nav-item">
                       <a class="nav-link" id="type-tab" data-toggle="tab" href="#type" role="tab" aria-controls="type" aria-selected="false">Hashtags</a>
                    </li>
+                   <li class="nav-item">
+                     <a class="nav-link" id="type-tab" data-toggle="tab" href="#myconnectTab" role="tab" aria-controls="myconn" aria-selected="false">My Connects</a>
+                  </li>
+
                 </ul>
                 <div class="tab-content" id="myTabContent">
                    <div class="tab-pane fade show active" id="home" role="tabpanel" aria-labelledby="home-tab">
                       <div class="p-3">
-                         <div class="row" *ngIf ="connectPeople.length > 0">
-                            <div class="col-md-4" *ngFor="let item of connectPeople | keyvalue; index as i;">
-                                  <div class="border network-item rounded mb-3">
+                        <div class="row" *ngIf ="filterConnectPeople.length == 0">No connections found </div>
+                         <div class="row" *ngIf ="filterConnectPeople.length > 0">
+                            <div class="col-md-4" *ngFor="let item of filterConnectPeople | keyvalue; index as i;">
+                                 <div class="border network-item rounded mb-3">
                                      <div class="p-3 d-flex align-items-center network-item-header">
                                         <div class="dropdown-list-image mr-3">
                                            <img class="rounded-circle" src="{{item.value['connections'].imageProfile | replaceImg40}}" alt="" onerror="this.src='assets/files/profilePics/blank.png';" alt="">
                                         </div>
+                                        <a href="" (click)="showProfile(item.value['connections'].id); false;" title="show profile">
                                         <div class="font-weight-bold">
                                            <h6 class="font-weight-bold text-dark mb-0">{{item.value['connections'].firstName}} {{item.value['connections'].lastName}}</h6>
                                            <div class="small text-black-50">{{item.value['connections'].positionName}} at {{item.value['connections'].companyName}}</div>
                                         </div>
+                                       </a>
                                      </div>
                                      <div class="d-flex align-items-center p-3 border-top border-bottom network-item-body">
                                         <div class="overlap-rounded-circle" *ngIf="item.value['connections'].mutual.length >0">
@@ -77,13 +96,14 @@
                            <div class="js-form-message">
                            <div class="form-group">
                               <div class="flex-shrink-1" style="padding:10px;">
-                              <input type="text" class="form-control" placeholder="Add group" formControlName="addGroup" [ngClass]="{ 'is-invalid': submitted && f.addGroup.errors }" aria-label="Add group"  style="width:50%; float: left;"/>
+                              <input type="text" class="form-control" placeholder="Add group" (focus)="hideMessage('groupExisted'); false;" formControlName="addGroup" [ngClass]="{ 'is-invalid': submitted && f.addGroup.errors }" aria-label="Add group"  style="width:50%; float: left;"/>
                                <button type="submit" class="btn btn-primary btn-sm" style="float: left; margin:2px 0px 0px 5px;">Save</button>
                                <div style='clear:both'></div>
                                <div *ngIf="submitted && f.addGroup.errors" class="invalid-feedback">
                                  <div *ngIf="f.addGroup.errors.required">Add group is required</div>
                                  <div *ngIf="f.addGroup.errors.pattern">Only characters and spaces are allowed.</div>
                            </div>
+                           <div class="warning-block" style="display:none;" id="groupExisted">Group was already existed.</div>
 
                               </div>
                            </div>
@@ -95,8 +115,9 @@
 
                       <div class="tab-pane fade show active" id="home" role="tabpanel" aria-labelledby="home-tab">
                         <div class="p-3">
-                           <div class="row" *ngIf ="allGroups.length > 0">
-                              <div class="col-md-4" *ngFor="let allGroup of allGroups; index as i;">
+                           <div class="row" *ngIf ="filterAllGroups.length == 0">No groups found </div>
+                           <div class="row" *ngIf ="filterAllGroups.length > 0">
+                              <div class="col-md-4" *ngFor="let allGroup of filterAllGroups; index as i;">
                                     <div class="border network-item rounded mb-3">
                                        <div class="p-3 d-flex align-items-center network-item-header">
                                           <div class="dropdown-list-image mr-3">
@@ -156,6 +177,33 @@
 
                       </div>
                    </div>
+                   
+                    <div class="tab-pane" id="myconnectTab" role="tabpanel" aria-labelledby="home-tab">
+                     <div class="p-3">
+                        <div class="row" *ngIf ="filterMyconnects.length == 0">No connections found </div>
+                        <div class="row" *ngIf ="filterMyconnects.length > 0">
+                           <div class="col-md-4" *ngFor="let myconnect of filterMyconnects">
+                                 <div class="border network-item rounded mb-3">
+                                    <div class="p-3 d-flex align-items-center network-item-header">
+                                       <div class="dropdown-list-image mr-3">
+                                          <img class="rounded-circle" src="{{myconnect.imageProfile}}" alt="" onerror="this.src='assets/files/profilePics/blank.png';" alt="">
+                                       </div>
+                                       <a href="" (click)="showProfile(myconnect.id); false;" title="show profile">
+                                       <div class="font-weight-bold">
+                                          <h6 class="font-weight-bold text-dark mb-0">{{myconnect.firstName}} {{myconnect.lastName}}</h6>
+                                          <div class="small text-black-50">{{myconnect.positionName}} at {{myconnect.companyName}}</div>
+                                       </div>
+                                    </a>
+                                    </div>
+                                    
+                                 </div>
+                             
+                           </div>
+                        </div>
+                     </div>
+                  </div>
+
+
                 </div>
              </div>
           </main>
@@ -186,17 +234,7 @@
                 </ul>
              </div>
              <div class="box shadow-sm mb-3 border rounded bg-white ads-box text-center">
-                <div class="image-overlap-2 pt-4">
-                   <img src="img/l4.png" class="img-fluid rounded-circle shadow-sm" alt="Responsive image">
-                   <img src="img/user.png" class="img-fluid rounded-circle shadow-sm" alt="Responsive image">
-                </div>
-                <div class="p-3 border-bottom">
-                   <h6 class="text-dark">Gurdeep, grow your career by following <span class="font-weight-bold"> Askbootsrap</span></h6>
-                   <p class="mb-0 text-muted">Stay up-to industry trends!</p>
-                </div>
-                <div class="p-3">
-                   <button type="button" class="btn btn-outline-primary btn-sm pl-4 pr-4"> FOLLOW </button>
-                </div>
+               <img src="assets/images/add/facehireLogin.png" class="img-fluid" alt="Responsive image">
              </div>
           </aside>
        </div>

@@ -24,7 +24,12 @@
             "styles": [
               "apps/login/src/styles.css"
             ],
-            "scripts": []
+            "scripts": [
+              "apps/login/src/assets/js/jquery-1.11.1.min.js",
+              "apps/login/src/assets/js/jquery-ui-min.js",
+              "apps/login/src/assets/js/svg-loader.js"
+              
+            ]
           },
           "configurations": {
             "production": {
@@ -154,9 +159,11 @@
             "styles": [
               "./node_modules/ngx-bootstrap/datepicker/bs-datepicker.css",
               "./node_modules/intl-tel-input/build/css/intlTelInput.css",
-              "apps/profile/src/styles.css"
+               "./node_modules/font-awesome/css/font-awesome.css",
+               "apps/profile/src/styles.css"
             ],
-            "scripts": []
+            "scripts": [
+            ]
           },
           "configurations": {
             "production": {
@@ -354,8 +361,8 @@
               "budgets": [
                 {
                   "type": "initial",
-                  "maximumWarning": "2mb",
-                  "maximumError": "5mb"
+                  "maximumWarning": "7mb",
+                  "maximumError": "7mb"
                 },
                 {
                   "type": "anyComponentStyle",

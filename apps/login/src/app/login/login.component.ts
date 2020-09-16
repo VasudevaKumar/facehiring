@@ -25,6 +25,7 @@ export class LoginComponent implements OnInit {
   returnUrl: '';
   currentUser =  '';
   isCredentialsCorrect = true;
+  role_id = 2;
   userSubscription: Subscription;
   constructor(
     private formBuilder: FormBuilder,
@@ -84,7 +85,7 @@ export class LoginComponent implements OnInit {
     }
             
              this.loading = true;
-             this.authenticationService.login(this.f.emailAddress.value, this.f.password.value)
+             this.authenticationService.login(this.f.emailAddress.value, this.f.password.value, this.role_id)
                  .pipe(first())
                  .subscribe(
                      data => {
@@ -102,31 +103,29 @@ export class LoginComponent implements OnInit {
                          }
                          else {
                           $('.alertsContainer .alertsRow.error').attr("style", "display: none !important");
-                          this.currentUser = JSON.parse(localStorage.getItem('currentUser'));
+                           this.currentUser = JSON.parse(localStorage.getItem('currentUser'));
+                          console.log(this.currentUser);
                           this.loading = false;
                           window.scrollTo({ top: 0, behavior: 'smooth' });
                           this.alerts.setDefaults('timeout',500);
                           this.alerts.setMessage(data.data.returnMessage ,'success');
-                          /*
+                          
                           if(this.currentUser.length > 0)
                           {
                             if(this.currentUser[0]['role_id'] == 2)
                             {
                               setTimeout(function(){
                                 window.location.href = '/profile';
-                                }, 5000);
+                                }, 3000);
                             }
                             if(this.currentUser[0]['role_id'] == 3)
                             {
                               setTimeout(function(){
                                 window.location.href = '/employee';
-                              }, 5000);
+                              }, 3000);
                             }
                           }
-                          */
                          
-
-
                          }
                         
                      },
@@ -141,5 +140,39 @@ export class LoginComponent implements OnInit {
     alert('here');
   }
   
+  register(roleID)
+  {
+    if(roleID == 2)
+    {
+      window.location.href = '/profile';
+    }
 
+    if(roleID == 3)
+    {
+      window.location.href = '/employee';
+    }
+
+  }
+  openLoginForm(roleID)
+  {
+    this.role_id = roleID;
+    
+    $('#loginDialog').dialog({
+      modal: true,
+       title: 'Login here',
+       zIndex: 10000,
+       maxHeight: 370,
+       height: 370,
+       maxWidth: 425,
+       width: 425,
+       resizable: false,
+       close: this.loginFormClose,
+       dialogClass: 'no-titlebar'
+     });
+  }
+
+  loginFormClose()
+  {
+    $('.alertsContainer .alertsRow.error').attr("style", "display: none !important");
+  }
 }

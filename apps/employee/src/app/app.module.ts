@@ -32,6 +32,11 @@ import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { ConfirmationDialogComponentComponent } from './confirmation-dialog-component/confirmation-dialog-component.component';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { EditJobPostComponent } from './edit-job-post/edit-job-post.component';
+import { ScheduleModule } from '@syncfusion/ej2-angular-schedule';
+import { ButtonModule } from '@syncfusion/ej2-angular-buttons';
+import { DayService, WeekService, WorkWeekService, MonthService, AgendaService, MonthAgendaService} from '@syncfusion/ej2-angular-schedule';
+import { ScheduleComponentComponent } from './schedule-component/schedule-component.component';
+import { JoblistingsComponent } from './joblistings/joblistings.component';
 
 
 const appRoutes:Routes = [
@@ -86,6 +91,16 @@ const appRoutes:Routes = [
   canActivate: [AdminGuard]
 },
 {
+  path : 'schedule',
+  component:ScheduleComponentComponent,
+  canActivate: [AdminGuard]
+},
+{
+  path : 'joblisting/:id',
+  component:JoblistingsComponent,
+  canActivate: [AdminGuard]
+},
+{
   path : '**',
   component:HomeComponentComponent,
   canActivate: [AdminGuard]
@@ -110,7 +125,7 @@ export class replaceImg40Pipe implements PipeTransform {
 
 
 @NgModule({
-  declarations: [AppComponent, RegistrationComponent, MenucomponentComponent, EditprofilecomponentComponent, HomeComponentComponent,replaceImg78Pipe,replaceImg40Pipe, CompanyProfileComponent, ChangePasswordComponent, PostJobComponent, ManageJobPostingsComponent,ConfirmationDialogComponentComponent, EditJobPostComponent],
+  declarations: [AppComponent, RegistrationComponent, MenucomponentComponent, EditprofilecomponentComponent, HomeComponentComponent,replaceImg78Pipe,replaceImg40Pipe, CompanyProfileComponent, ChangePasswordComponent, PostJobComponent, ManageJobPostingsComponent,ConfirmationDialogComponentComponent, EditJobPostComponent, ScheduleComponentComponent, JoblistingsComponent],
   imports: [
      BrowserModule,
      ReactiveFormsModule,
@@ -132,10 +147,17 @@ export class replaceImg40Pipe implements PipeTransform {
     AgGridModule.withComponents([]),
     AlertsModule.forRoot(),
     RouterModule.forRoot(appRoutes),
+    ScheduleModule ,
+    ButtonModule,
     NgbModule,
     ],
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
-  providers: [],
+  providers: [DayService, 
+    WeekService, 
+    WorkWeekService, 
+    MonthService,
+    AgendaService,
+    MonthAgendaService],
   bootstrap: [AppComponent],
 })
 export class AppModule {}

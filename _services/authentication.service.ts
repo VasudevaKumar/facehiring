@@ -15,6 +15,7 @@ export class AuthenticationService {
     env = environment;
 
     constructor(private http: HttpClient) {
+        //this.currentUserSubject = new BehaviorSubject<User>(JSON.parse(localStorage.getItem('currentUser')));
         this.currentUserSubject = new BehaviorSubject<User>(JSON.parse(localStorage.getItem('currentUser')));
         this.currentUser = this.currentUserSubject.asObservable();
     }
@@ -23,11 +24,11 @@ export class AuthenticationService {
         return this.currentUserSubject.value;
     }
 
-    login(username, password) {
+    login(emailAddress, password, role_id) {
         // const api = 'http://facehiring.com/fhapi/verifyLogin';
         // const api = 'http://localhost/fhapi/verifyLogin';
         const api = this.env.apiBaseURL+'/verifyLogin';
-        return this.http.post<any>(api, { username, password })
+        return this.http.post<any>(api, { emailAddress, password, role_id})
             .pipe(map(user => {
 
                 if(user.data.msg == 'success')

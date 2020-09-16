@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { EmployeeService } from '../_services/employee.service';
+import { NgxSpinnerService } from "ngx-spinner";
 
 declare var jQuery: any;
 declare var $: any;
@@ -16,15 +17,26 @@ export class ConnectioncomponentComponent implements OnInit {
 
   loggedInEmployeeID:any;
   currentUser:any;
+
   connectPeople=[];
   totalConnects = [];
   allGroups = [];
+  myconnects = [];
+
+  filterConnectPeople=[];
+  filterAllGroups = [];
+  filterMyconnects = [];
+
+
+
+
 
   GroupsForm: FormGroup;
   HashTagForm:FormGroup;
 
   hashtagMsg = '';
   hashtagValue = '';
+  searchString = '';
 
   public isHashTagAvailable = true;
 
@@ -32,7 +44,8 @@ export class ConnectioncomponentComponent implements OnInit {
   constructor(
     private router: Router,
     private EmployeeService_:EmployeeService,
-    private formBuilder: FormBuilder
+    private formBuilder: FormBuilder,
+    private spinner: NgxSpinnerService
 
     
 ) {
@@ -40,11 +53,10 @@ export class ConnectioncomponentComponent implements OnInit {
 }
 
   ngOnInit(): void {
-
+    this.spinner.show();
     this.currentUser = JSON.parse(localStorage.getItem('currentUser'));
-    // this.loggedInEmployeeID  = this.currentUser['data'][0].id;
-    this.loggedInEmployeeID  = 63;
-   this.loadContent(this.loggedInEmployeeID);
+    this.loggedInEmployeeID  = this.currentUser[0].user_id;
+    this.loadContent(this.loggedInEmployeeID);
 
      this.GroupsForm = this.formBuilder.group({
        addGroup: ['',
@@ -73,7 +85,7 @@ export class ConnectioncomponentComponent implements OnInit {
   get h() { return this.HashTagForm.controls; }
   
   onSubmit() {
-   
+    $("#groupExisted").hide();
     this.submitted = true;
 
     if (this.GroupsForm.invalid) {
@@ -88,10 +100,30 @@ export class ConnectioncomponentComponent implements OnInit {
   const _that = this;
             this.EmployeeService_
             .addGroup(formData)
-            .subscribe((resp) => {
+            .subscribe((data) => {
+
+                 console.log(data);
+                 console.log(data.data);
+                 console.log(data.data.msg);
+
+
+                 if(data.data.msg == 'fail')
+                 {
+                   console.log('my google');
+                    $("#groupExisted").show();
+                 }
+                 else {
+                  this.EmployeeService_.gettotalGroups(this.loggedInEmployeeID)
+                  .subscribe(allGroups => (_that.allGroups = allGroups));
+                 }
+             
               });
   }
 
+  hideMessage(divID)
+  {
+    $("#"+divID).hide();
+  }
   onHashTagSubmit() {
    
     this.submitted = true;
@@ -118,14 +150,22 @@ export class ConnectioncomponentComponent implements OnInit {
       const res1 = this.EmployeeService_.getConnectPeople(employeeID).toPromise();
       const res2 = this.EmployeeService_.gettotalConnects(employeeID).toPromise();
       const res3 = this.EmployeeService_.gettotalGroups(employeeID).toPromise();
-      
-      let res = await Promise.all([res1, res2, res3]);
+      const res4 = this.EmployeeService_.getMyConnects(employeeID).toPromise();
+
+      let res = await Promise.all([res1, res2, res3, res4]);
       //let res = await Promise.all([res1, res4]);
       _that.connectPeople = res[0];
       _that.totalConnects = res[1];
       _that.allGroups = res[2];
+      _that.myconnects = res[3];
 
-      console.log( _that.allGroups);
+      _that.filterConnectPeople=_that.connectPeople;
+      _that.filterAllGroups = _that.allGroups;
+      _that.filterMyconnects =_that.myconnects;
+
+      console.log( _that.filterConnectPeople);
+
+      this.spinner.hide();
 
     }
 
@@ -228,4 +268,41 @@ export class ConnectioncomponentComponent implements OnInit {
 
     }
 
+    filterConnects()
+    {
+      let searchJobString = $("#searchString").val().toLowerCase();
+
+      // _that.filterConnectPeople=_that.connectPeople;
+      // _that.filterAllGroups = _that.allGroups;
+      // _that.filterMyconnects =_that.myconnects;
+
+      
+      this.filterConnectPeople = this.connectPeople;
+      this.filterMyconnects = this.myconnects;
+      this.filterAllGroups = this.allGroups;
+
+      
+      if(searchJobString!='')
+      {
+        this.filterConnectPeople = this.filterConnectPeople.filter( ({ connections }) => connections.firstName.toLowerCase().includes(searchJobString));
+        this.filterMyconnects = this.filterMyconnects.filter( ({ firstName }) => firstName.toLowerCase().includes(searchJobString));
+        this.filterAllGroups = this.filterAllGroups.filter( ({ firstName }) => firstName.toLowerCase().includes(searchJobString));
+
+      }
+      else
+      {
+        this.filterConnectPeople = this.connectPeople;
+        this.filterMyconnects = this.myconnects;
+        this.filterAllGroups = this.allGroups;
+
+      }
+
+    }
+
+    showProfile(userID)
+    {
+      // this.router.navigate(['/profile/myProfile']);
+      localStorage.setItem('searchUser', userID);
+      this.router.navigate(['/myProfile']);
+    }
 }

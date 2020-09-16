@@ -4,7 +4,7 @@
    <div class="container" *ngIf="isDataLoaded">
     <ul class="navbar-nav ml-auto d-flex align-items-left">
        <li class="nav-item" >
-          <a class="nav-link" href="#"><i class="feather-briefcase mr-2"></i><span class="d-none d-lg-inline">My Interviews</span></a>
+          <a class="nav-link" href="/employee/schedule"><i class="feather-briefcase mr-2"></i><span class="d-none d-lg-inline">My Interviews</span></a>
        </li>  
 
        
@@ -68,17 +68,17 @@
 
         <div class="col-md-6 float-right text-right">
           <div class="all-listing-flex-container text-right float-right">
-            <div><span>Total Postings:&nbsp;</span><span><strong>{{totalPostings}}</strong></span></div>
-            <div><span>Used Postings:&nbsp;</span><span><strong>{{usedPostings}}</strong></span></div>
-            <div><span>Remaining Postings:&nbsp;</span><span><strong>{{remainingPostings}}</strong></span></div>
-            <div><span>|&nbsp;&nbsp;Active Postings:&nbsp;</span><span><strong>{{activePostings}}</strong></span></div>
-            <div><span>Paused Postings:&nbsp;</span><span><strong>{{pausedPostings}}</strong></span></div>
+            <div><span>Total Postings</span><span><strong>{{totalPostings}}</strong></span></div>
+            <div><span>Used Postings</span><span><strong>{{usedPostings}}</strong></span></div>
+            <div><span>Remaining Postings</span><span><strong>{{remainingPostings}}</strong></span></div>
+            <div><span>Active Postings</span><span><strong>{{activePostings}}</strong></span></div>
+            <div><span>Paused Postings</span><span><strong>{{pausedPostings}}</strong></span></div>
           </div>
         </div>
         <div class="float-none"><br/></div>
     </div>
     <div class="col-md-12 mt-10"></div>
-
+    <div class="float-none"></div>
     <div style="height: 500px; width: 100%; padding: 0px; margin: 0px;">
       <ag-grid-angular
         #agGrid

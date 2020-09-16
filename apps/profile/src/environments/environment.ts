@@ -3,10 +3,10 @@
 // The list of file replacements can be found in `angular.json`.
 
 export const environment = {
-  production: false,
-  environmentName: 'LOCAL',
-  hostBaseURL: 'http://localhost/',
-  apiBaseURL: 'http://localhost/fhapi'
+  production: true,
+  environmentName: 'PROD',
+  hostBaseURL: 'https://facehiring.com',
+  apiBaseURL: 'https://facehiring.com/fhapi'
 };
 
 /*

@@ -9,31 +9,90 @@
       <link rel="icon" type="image/png" href="assets/img/fav.png">
       <title>Facehiring</title>
       <base href="/" />
-      <!-- Slick Slider -->
+
       <link rel="stylesheet" type="text/css" href="assets/vendor/slick/slick.min.css"/>
       <link rel="stylesheet" type="text/css" href="assets/vendor/slick/slick-theme.min.css"/>
-      <!-- Feather Icon-->
       <link href="assets/vendor/icons/feather.css" rel="stylesheet" type="text/css">
-      <!-- Bootstrap core CSS -->
-      <link href="assets/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
-      <!-- Custom styles for this template -->
+      <link href="assets/css/bootstrap.min.css" rel="stylesheet">
       <link href="assets/css/style.css" rel="stylesheet">
-      
-      <link rel="stylesheet" href="//fonts.googleapis.com/css?family=Roboto&amp;lang=en" />
-      
-      
-      <link rel="stylesheet" href="https://code.jquery.com/ui/1.11.1/themes/smoothness/jquery-ui.css" />
+      <link rel="stylesheet" href="assets/css/font.google.css" />
+      <link rel="stylesheet" href="assets/css/jquery-ui.css" />
+
+      <!-- inline spinner styles to be able to display spinner right away -->
+   <style type="text/css">
+    body, html {
+      height: 100%;
+    }
+    .app-loading {
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 100%;
+    }
+
+    .app-loading .spinner {
+      height: 50px;
+      width: 50px;
+      animation: rotate 2s linear infinite;
+      transform-origin: center center;
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      margin: auto;
+    }
+
+    .app-loading .spinner .path {
+      stroke-dasharray: 1, 200;
+      stroke-dashoffset: 0;
+      animation: dash 1.5s ease-in-out infinite;
+      stroke-linecap: round;
+      stroke: #000;
+    }
+
+    @keyframes rotate {
+      100% {
+        transform: rotate(360deg);
+      }
+    }
+
+    @keyframes dash {
+      0% {
+        stroke-dasharray: 1, 200;
+        stroke-dashoffset: 0;
+      }
+      50% {
+        stroke-dasharray: 89, 200;
+        stroke-dashoffset: -35px;
+      }
+      100% {
+        stroke-dasharray: 89, 200;
+        stroke-dashoffset: -124px;
+      }
+    }
+  </style>
+
    </head>
 
-  </head>
+  
   <body>
-    <facehiring-root></facehiring-root>
+    <facehiring-root>
+
+      <div class="app-loading">
+        <svg class="spinner" viewBox="25 25 50 50">
+          <circle class="path" cx="50" cy="50" r="20" fill="none" stroke-width="2" stroke-miterlimit="10"/>
+        </svg>
+      </div>
+      
+    </facehiring-root>
 
     <!-- Bootstrap core JavaScript -->
-    <script src="https://code.jquery.com/jquery-1.11.1.min.js"></script>
-    <script src="https://code.jquery.com/ui/1.11.1/jquery-ui.min.js"></script>
-    <script src="assets/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
-    <!-- slick Slider JS-->
+    <script type="text/javascript" src="assets/js/jquery-1.11.1.min.js"></script>
+    <script type="text/javascript" src="assets/js/jquery-ui-min.js"></script>
+    <script type="text/javascript" src="assets/js/bootstrap.bundle.min.js"></script>
     <script type="text/javascript" src="assets/vendor/slick/slick.min.js"></script>
     <!-- Custom scripts for all pages-->
-    <script src="assets/js/osahan.js"></script>
+    <script type="text/javascript" src="assets/js/osahan.js"></script>

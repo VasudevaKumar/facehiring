@@ -6,7 +6,7 @@
             <div *ngIf="ImageTypeeerror" class="warning-block">Only allow images (.png , .jpg, .jpg)</div>
          </form>
  </div>
- <div class="bg-white shadow-sm border-bottom" *ngIf="isEmployeeProfileLoaded">
+ <div class="bg-white shadow-sm border-bottom" *ngIf="isEmployeeProfileLoaded && employeeProfiles.length > 0">
     <div class="container">
        <div class="row">
           <div class="col-md-12">

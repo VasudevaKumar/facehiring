@@ -105,6 +105,30 @@ export class ManageJobPostingsComponent implements OnInit {
         pinned: 'left'
       },
       {
+        headerName: 'Job Profiles',
+        width: 150,
+        sortable: true,
+        filter: true,
+        resizable: true,
+        cellRenderer: function (params) {
+          const mainDiv = document.createElement('div');
+          const filesDiv = document.createElement('div');
+
+          mainDiv.setAttribute('style', 'width:100%; text-align:center;');
+          mainDiv.setAttribute('class', 'fa-sm');
+          filesDiv.setAttribute('style', 'float:left; cursor:pointer;');
+          filesDiv.innerHTML  = '<i class="fa fa-file fa-1x" aria-hidden="true" title="Edit"></i>';
+          filesDiv.addEventListener('click', () => {
+            _that.joblisting(_that.loggedInEmployeeID , params.node.data.id)
+          });
+          mainDiv.appendChild(filesDiv);
+          return mainDiv;
+
+        }
+        
+      },
+
+      {
         headerName: 'Min. Years',
         width: 100,
         field: 'yearMin',
@@ -315,6 +339,7 @@ export class ManageJobPostingsComponent implements OnInit {
     window.location.href = '/employee/postJob';
   }
 
+
   statusChange(loggedInEmployee , id , status)
   {
 
@@ -444,8 +469,12 @@ export class ManageJobPostingsComponent implements OnInit {
   {
     this.selectedJobPosting = [];
     this.selectedJobPosting = this.rowData.find( ({ id }) => id === rowID );
-    
     window.location.href = '/employee/editJob/'+rowID;
+  }
+
+  joblisting(employeeID , rowID)
+  {
+    window.location.href = '/employee/joblisting/'+rowID;
   }
 
 }

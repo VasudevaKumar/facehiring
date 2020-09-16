@@ -185,4 +185,65 @@ export class HrserviceService {
         ).pipe(map((data: any) => data.data));
   }
 
+  InterviewSchedules(employeeID:any)
+  {
+    const api = this.env.apiBaseURL+'/Employee/InterviewSchedules';
+    return this.http.post(
+        api,
+        {employeeID:employeeID},
+        ).pipe(map((data: any) => data.data));
+  }
+
+  getLatestJobs(employeeID)
+  {
+    const api = this.env.apiBaseURL+'/Employee/getLatestJobs';
+    return this.http.post(
+        api,
+        {employeeID:employeeID},
+        ).pipe(map((data: any) => data.data));
+  }
+
+  getSingleJob(jobID:any)
+  {
+    const api = this.env.apiBaseURL+'/Employee/getSingleJob';
+    return this.http.post(
+        api,
+        {jobID:jobID},
+        ).pipe(map((data: any) => data.data));
+  }
+
+
+  applyJob(employeeID:any, jobID)
+  {
+    const api = this.env.apiBaseURL+'/Employee/applyJob';
+    return this.http.post(
+        api,
+        {
+            employeeID:employeeID,
+            jobID:jobID
+        },
+        ).pipe(map((data: any) => data.data));
+  }
+
+  getjobListings(employeeID:any, jobID)
+  {
+    const api = this.env.apiBaseURL+'/Employee/getjobListings';
+    return this.http.post(
+        api,
+        {
+            employeeID:employeeID,
+            jobID:jobID
+        },
+        ).pipe(map((data: any) => data.data));
+  }
+
+  myjobs(employeeID)
+  {
+    const api = this.env.apiBaseURL+'/Employee/myjobs';
+    return this.http.post(
+        api,
+        {employeeID:employeeID},
+        ).pipe(map((data: any) => data.data));
+  }
+
 }

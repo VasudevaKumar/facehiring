@@ -53,6 +53,7 @@ export class MenucomponentComponent implements OnInit {
   logout()
   {
     localStorage.removeItem('currentUser');
+    localStorage.removeItem('companyID');
     localStorage.clear();
     window.location.href = '/login';
   }

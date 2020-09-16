@@ -37,7 +37,7 @@
                         <!-- <label class="mb-1">BIO</label> -->
                         <div class="position-relative">
                            <textarea class="form-control" rows="2" name="text" placeholder="Enter Bio" formControlName="bio" class="form-control" 
-                           [ngClass]="{ 'is-invalid': submitted && f.bio.errors }" placeholder="Enter about your self" [maxLength]="150">
+                           [ngClass]="{ 'is-invalid': submitted && f.bio.errors }" placeholder="Enter about your self" [maxLength]="350">
                         </textarea>
                         <div *ngIf="submitted && f.bio.errors" class="invalid-feedback">
                            <div *ngIf="f.bio.errors.required">About is required</div>
@@ -442,14 +442,14 @@
                         <div class="col-sm-6 mb-2">
                            <div class="js-form-message">
                               <label id="locationLabel" class="form-label">
-                              Location
+                              State
                               <span class="text-danger">*</span>
                               </label>
                                     <div class = "form-group">
                                     <ng-autocomplete 
                                       [data]="locations"
                                       [searchKeyword]="location_keyword"
-                                      placeHolder="Select location"
+                                      placeHolder="Select state"
                                       formControlName="ddlLocation"
                                       (selected)='selectLocationEvent($event)'
                                       (inputChanged)='onChangeLocationSearch($event)'
@@ -467,7 +467,7 @@
                                     <div [innerHTML]="notFound"></div>
                                     </ng-template>
 
-                                    <span class="help-block warning-block" id="invalid-location" *ngIf="showLocationErrorMessage">Location is required</span>
+                                    <span class="help-block warning-block" id="invalid-location" *ngIf="showLocationErrorMessage">State is required</span>
 
                                  </div>
                                     
@@ -626,49 +626,63 @@
                </div>
             </div>
             <div class="border rounded bg-white mb-3">
-               <div class="box-title border-bottom p-3">
+               
+               <div class="row">
+               <div class="box-title border-bottom p-3 col-sm-11 float-left">
                   <h6 class="m-0">Experience
                   </h6>
                   <p class="mb-0 mt-0 small">Tell about your work, job, and other experiences.
                   </p>
                </div>
-               <div class="box-body px-3 pt-3 pb-0">
-                  <div class="row">
+
+               <div class="box-title border-bottom p-3 col-sm-1 float-right" *ngIf="countExp == 0">
+                  <i class="fa fa-plus-circle fa-2x" aria-hidden="true" title="Add Experience" (click)="addExp(0); false;" style="cursor:pointer;"></i>
+               </div>
+
+               <div class="float-none"></div>
+            </div>
+
+               <div class="box-body px-3 pt-3 pb-0" id="experienceMainDiv">
+                  <div class="actualExpContent" id="topdiv1" style="width:100%;" *ngFor="let exp of expFormControls(); let i = index; last as isLast;">
+                  <div class="row" style="height:75px;">
                      <div class="col-sm-6 mb-4">
                         <!-- Input -->
                         <div class="position-relative">
+                           <div class ="fromDateCls" style="margin:0px; padding:0px;">
                            <mat-form-field color="accent" style="width: 95%;">
-                              <mat-label>From date</mat-label>
-                              <input matInput [matDatepicker]="picker1" formControlName="fromDate1">
+                              <mat-label>From date </mat-label>
+                              
+                              <input matInput [matDatepicker]="picker1" name="fromDate[]" id="fromDate{{i}}" class="inputFormCls">
                               <mat-datepicker-toggle matSuffix [for]="picker1"></mat-datepicker-toggle>
                               <mat-datepicker #picker1></mat-datepicker>
                             </mat-form-field>
+                           </div>
                        </div>
                         <!-- End Input -->
+                        <div class="col-sm-12 warning-block"  id="fromDateErrorMsg{{i}}" style="display:none; padding:5px; color:red;"></div>
                      </div>
                      <div class="col-sm-6 mb-4">
                         <!-- Input -->
                         <div class="position-relative">
                            <mat-form-field color="accent" style="width: 95%;">
                               <mat-label>To date</mat-label>
-                              <input matInput [matDatepicker]="picker2" formControlName="toDate1">
+                              <input matInput [matDatepicker]="picker2" name="toDate[]" id="toDate{{i}}">
                               <mat-datepicker-toggle matSuffix [for]="picker2"></mat-datepicker-toggle>
                               <mat-datepicker #picker2></mat-datepicker>
                             </mat-form-field>
                        </div>
                         <!-- End Input -->
+                        <div class="col-sm-12 warning-block"  id="toDateErrorMsg{{i}}" style="display:none; padding:5px; color:red;"></div>
                      </div>
                   </div>
-                  <div class="row">
+                  <div class="row" style="height:75px;">
                      <div class="col-sm-6 mb-4">
                         <label id="companyLabel" class="form-label">Company</label>
                         <!-- Input -->
                            <div class="form-group">
-                              <input type="text" formControlName="ddlCompany1" class="form-control" 
-                               placeholder="Enter company name" aria-label="Enter company name" [ngClass]="{ 'is-invalid': submitted && f.ddlCompany1.errors }"/>
-                              <div *ngIf="submitted && f.ddlCompany1.errors" class="invalid-feedback">
-                                    <div *ngIf="f.ddlCompany1.errors.pattern">Special characters are not allowed.</div>
-                              </div>
+                              <input type="text" name="ddlCompany[]" id="ddlCompany{{i}}" class="form-control" 
+                               placeholder="Enter company name" aria-label="Enter company name"/>
+                               <div class="col-sm-12 warning-block"  id="companyErrorMsg{{i}}" style="display:none; padding:5px; color:red;"></div>
                            </div>
                            <!-- <span class="help-block warning-block" id="invalid-company" *ngIf="showCompanyErrorMessage">Company is required</span> -->
 
@@ -679,27 +693,179 @@
                         <label id="positionLabel" class="form-label">Position</label>
                         <!-- Input -->
                         <div class="form-group">
-                           <input type="text" formControlName="ddlPosition1" class="form-control" 
-                            placeholder="Enter position name" aria-label="Enter position name" [ngClass]="{ 'is-invalid': submitted && f.ddlPosition1.errors }"/>
-                           <div *ngIf="submitted && f.ddlPosition1.errors" class="invalid-feedback">
-                                 <div *ngIf="f.ddlPosition1.errors.pattern">Special characters are not allowed.</div>
-                           </div>
+                           <input type="text" name="ddlPositions[]" id="ddlPosition{{i}}" class="form-control" 
+                            placeholder="Enter position name" aria-label="Enter position name"/>
+                            <div class="col-sm-12 warning-block"  id="poitionErrorMsg{{i}}" style="display:block; padding:5px; color:red;"></div>
                         </div>
 
                         <!-- End Input -->
-                     </div>
+                     </div>`
                   </div>
 
+                  <div class="row">
+                     <div class="col-sm-12 mb-4">
+                        <label id="companyLabel" class="form-label">Description</label>
+                        <!-- Input -->
+                           <div class="form-group">
+                             <input type="text" name="description[]" class="form-control" 
+                            placeholder="Enter decription" aria-label="Enter decription" style="width:100%;"/>
+                           </div>
+                           <!-- <span class="help-block warning-block" id="invalid-company" *ngIf="showCompanyErrorMessage">Company is required</span> -->
+
+                       
+                        <!-- End Input -->
+                     </div>
+                  </div>
                   <!-- <a class="d-inline-block u-text-muted" href="#">
                      <span class="mr-1">+</span>
                         Add Experience
                      </a>
                      -->
+                     <div class="row">
+                        <div class="col-sm-1" *ngIf="isLast">
+                           <i class="fa fa-plus-circle fa-2x" aria-hidden="true" title="Add Experience" (click)="addExp(i); false;" style="cursor:pointer;"></i>
+                        </div>
+                        <div class="col-sm-1">
+                              <i class="fa fa-minus-circle fa-2x" aria-hidden="true" title="Remove Experience" (click)="removeExp(i); false;" style="cursor:pointer;"></i>
+                        </div>
+                           <div class="col-sm-6"  id="errorMsg{{i}}" style="display:none; padding:5px; color:red;"></div>
+                     </div>
 
-               </div>
+                     <hr>
+
+                  </div> <!-- actualContent -->
+                
+                     
+                  
+
+
+               </div> <!--experienceMainDiv  -->
                
 
+
             </div>
+
+            <!-- Education -->
+
+            <div class="border rounded bg-white mb-3">
+               
+               <div class="row">
+                  <div class="box-title border-bottom p-3 col-sm-11 float-left">
+                     <h6 class="m-0">Education 
+                     </h6>
+                     <p class="mb-0 mt-0 small">Tell about your education details
+                     </p>
+                  </div>
+   
+                  <div class="box-title border-bottom p-3 col-sm-1 float-right" *ngIf="countEdu == 0">
+                     <i class="fa fa-plus-circle fa-2x" aria-hidden="true" title="Add Education" (click)="addEdu(0); false;" style="cursor:pointer;"></i>
+                  </div>
+   
+                  <div class="float-none"></div>
+               </div>
+
+               <div class="box-body px-3 pt-3 pb-0" id="experienceMainDiv">
+                  <div class="actualContent" id="topdiv1" style="width:100%;" *ngFor="let exp of eduFormControls(); let i = index; last as isLast;">
+                  <div class="row" style="height:75px;">
+                     <div class="col-sm-6 mb-4">
+                        <!-- Input -->
+                        <div class="position-relative">
+                           <div class ="fromDateCls" style="margin:0px; padding:0px;">
+                           <mat-form-field color="accent" style="width: 95%;">
+                              <mat-label>From date <span class="text-danger">*</span></mat-label>
+                              <input matInput [matDatepicker]="picker1" name="fromDate_edu[]" id="fromDate_edu{{i}}" class="inputFormCls">
+                              <mat-datepicker-toggle matSuffix [for]="picker1"></mat-datepicker-toggle>
+                              <mat-datepicker #picker1></mat-datepicker>
+                            </mat-form-field>
+                           </div>
+                       </div>
+                        <!-- End Input -->
+                        <div class="col-sm-12 warning-block"  id="fromDateErrorMsg_edu{{i}}" style="display:none; padding:5px; color:red;"></div>
+                     </div>
+                     <div class="col-sm-6 mb-4">
+                        <!-- Input -->
+                        <div class="position-relative">
+                           <mat-form-field color="accent" style="width: 95%;">
+                              <mat-label>To date <span class="text-danger">*</span></mat-label>
+                              <input matInput [matDatepicker]="picker2" name="toDate_edu[]" id="toDate_edu{{i}}">
+                              <mat-datepicker-toggle matSuffix [for]="picker2"></mat-datepicker-toggle>
+                              <mat-datepicker #picker2></mat-datepicker>
+                            </mat-form-field>
+                       </div>
+                        <!-- End Input -->
+                        <div class="col-sm-12 warning-block"  id="toDateErrorMsg_edu{{i}}" style="display:none; padding:5px; color:red;"></div>
+                     </div>
+                  </div>
+                  <div class="row" style="height:75px;">
+                     <div class="col-sm-6 mb-4">
+                        <label id="companyLabel" class="form-label">Education <span class="text-danger">*</span> </label>
+                        <!-- Input -->
+                           <div class="form-group">
+                              <input type="text" name="ddlClass_edu[]" id="ddlClass_edu{{i}}" class="form-control" 
+                               placeholder="Enter education details" aria-label="Enter education details"/>
+                               <div class="col-sm-12 warning-block"  id="classErrorMsg_edu{{i}}" style="display:none; padding:5px; color:red;"></div>
+                           </div>
+                           <!-- <span class="help-block warning-block" id="invalid-company" *ngIf="showCompanyErrorMessage">Company is required</span> -->
+
+                       
+                        <!-- End Input -->
+                     </div>
+                     <div class="col-sm-6 mb-4">
+                        <label id="positionLabel" class="form-label">College/University <span class="text-danger">*</span></label>
+                        <!-- Input -->
+                        <div class="form-group">
+                           <input type="text" name="ddlColleges_edu[]" id="ddlColleges_edu{{i}}" class="form-control" 
+                            placeholder="Enter college name" aria-label="Enter college name"/>
+                            <div class="col-sm-12 warning-block"  id="collegeErrorMsg_edu{{i}}" style="display:block; padding:5px; color:red;"></div>
+                        </div>
+
+                        <!-- End Input -->
+                     </div>`
+                  </div>
+
+                  <div class="row">
+                     <div class="col-sm-12 mb-4">
+                        <label id="companyLabel" class="form-label">Description</label>
+                        <!-- Input -->
+                           <div class="form-group">
+                             <input type="text" name="description_edu[]" class="form-control" 
+                            placeholder="Enter decription" aria-label="Enter decription" style="width:100%;"/>
+                           </div>
+                           <!-- <span class="help-block warning-block" id="invalid-company" *ngIf="showCompanyErrorMessage">Company is required</span> -->
+
+                       
+                        <!-- End Input -->
+                     </div>
+                  </div>
+                  <!-- <a class="d-inline-block u-text-muted" href="#">
+                     <span class="mr-1">+</span>
+                        Add Experience
+                     </a>
+                     -->
+                     <div class="row">
+                        <div class="col-sm-1" *ngIf="isLast">
+                           <i class="fa fa-plus-circle fa-2x" aria-hidden="true" title="Add Education" (click)="addEdu(i); false;" style="cursor:pointer;"></i>
+                        </div>
+                        <div class="col-sm-1">
+                              <i class="fa fa-minus-circle fa-2x" aria-hidden="true" title="Remove Education" (click)="removeEdu(i); false;" style="cursor:pointer;"></i>
+                        </div>
+                           <div class="col-sm-6"  id="errorMsg_edu{{i}}" style="display:none; padding:5px; color:red;"></div>
+                     </div>
+
+                     <hr>
+
+                  </div> <!-- actualContent -->
+                
+                     
+                  
+
+
+               </div> <!--experienceMainDiv  -->
+               
+
+
+            </div>
+
 
             <div class="border rounded bg-white mb-3">
                <div class="box-title border-bottom p-3">
@@ -732,7 +898,7 @@
             </div>
 
             <div class="mb-3 text-right">
-               <a class="font-weight-bold btn btn-link rounded p-3" href="#"> &nbsp;&nbsp;&nbsp;&nbsp; Cancel &nbsp;&nbsp;&nbsp;&nbsp; </a>
+               <a class="font-weight-bold btn btn-link rounded p-3" href="#" (click)="cancelRegForm(); false;"> &nbsp;&nbsp;&nbsp;&nbsp; Cancel &nbsp;&nbsp;&nbsp;&nbsp; </a>
                <button [disabled]="loading" class="btn btn-primary">
                   <span *ngIf="loading" class="spinner-border spinner-border-sm mr-1"></span>
                   Save Changes

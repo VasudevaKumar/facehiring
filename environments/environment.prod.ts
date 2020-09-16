@@ -1,6 +1,6 @@
 export const environment = {
   production: true,
   environmentName: 'PROD',
-  hostBaseURL: 'http://facehiring.com',
-  apiBaseURL: 'http://facehiring.com/fhapi'
+  hostBaseURL: 'https://facehiring.com',
+  apiBaseURL: 'https://facehiring.com/fhapi'
 };

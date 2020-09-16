@@ -73,6 +73,7 @@ preferredCountries: CountryISO[] = [CountryISO.UnitedStates, CountryISO.UnitedKi
   public isLocationsLoaded = false;
 
   public currentUser:any;
+  public loggedInCompanyID:any;
 
   constructor(
       private formBuilder: FormBuilder,
@@ -95,9 +96,9 @@ preferredCountries: CountryISO[] = [CountryISO.UnitedStates, CountryISO.UnitedKi
       this.spinner.show();
       this.selectedSkillItems = [];
       this.loadLocations();
-
+        this.loggedInCompanyID =  localStorage.getItem('companyID')
        this.currentUser = JSON.parse(localStorage.getItem('currentUser'));
-       console.log(this.currentUser);
+       //console.log(this.loggedInCompanyID);
 
        this.loggedInEmployeeID  = this.currentUser[0].user_id;
        //this.loggedInEmployeeID  = 13

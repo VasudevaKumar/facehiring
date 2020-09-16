@@ -153,39 +153,6 @@
                         </div>
                         <!-- End Input -->
                      </div>
-                     
-                     <div class="row">
-                        <!-- Input -->
-                        <div class="col-sm-6 mb-2">
-                           <div class="js-form-message">
-                              <label id="nameLabel" class="form-label">
-                              Password
-                              <!-- <span class="text-danger">*</span> -->
-                              </label>
-                              <div class="form-group">
-                                 <input type="password" formControlName="password" class="form-control" 
-                                  placeholder="Enter your password`" aria-label="Enter your password" />
-                              </div>
-                           </div>
-                        </div>
-                        <!-- End Input -->
-                        <!-- Input -->
-                        <div class="col-sm-6 mb-2">
-                           <div class="js-form-message">
-                              <label id="usernameLabel" class="form-label">
-                              Confirm Password
-                              <!-- <span class="text-danger">*</span> -->
-                              </label>
-                              <div class="form-group">
-                                 <input type="password" formControlName="confirmPassword" class="form-control" 
-                                  placeholder="Re-enter password" aria-label="Enter your password" />
-                                 
-
-                              </div>
-                           </div>
-                        </div>
-                        <!-- End Input -->
-                     </div>
 
 
                      <label class="form-label">
@@ -409,42 +376,19 @@
                      </div>
                      <div class="row">
                         <!-- Input -->
-                        <div class="col-sm-6 mb-2">
-                           <div class="js-form-message">
-                              <label id="emailLabel" class="form-label">
-                              Email address
-                              <span class="text-danger">*</span>
-                              </label>
-                              <div class="form-group">
-                                 <input type="email" class="form-control" name="emailAddress" id="emailAddress" [ngClass]="{ 'is-invalid': submitted && f.emailAddress.errors }" formControlName="emailAddress" placeholder="Enter email" aria-label="Enter email" (change)="verifyEmailAvailability($event.target.value);" (focus)="resetEmailValidation();">
-                                 <small class="form-text text-muted">We'll never share your email with anyone else.</small>
-
-                                 <div *ngIf="submitted && f.emailAddress.errors" class="invalid-feedback">
-                                    <div *ngIf="f.emailAddress.errors.required">Email is required</div>
-                                    <div *ngIf="f.emailAddress.errors.pattern">Invalid email address</div>
-                              </div>
-
-                              <div *ngIf="!isEmailAvailable" class="warning-block">
-                                 Email address is not available.
-                           </div>
-
-
-                              </div>
-                           </div>
-                        </div>
                         <!-- End Input -->
                         <!-- Input -->
                         <div class="col-sm-6 mb-2">
                            <div class="js-form-message">
                               <label id="locationLabel" class="form-label">
-                              Location
+                              State
                               <span class="text-danger">*</span>
                               </label>
                                     <div class = "form-group">
                                     <ng-autocomplete 
                                       [data]="locations"
                                       [searchKeyword]="location_keyword"
-                                      placeHolder="Select location"
+                                      placeHolder="Select state"
                                       formControlName="ddlLocation"
                                       (selected)='selectLocationEvent($event)'
                                       (inputChanged)='onChangeLocationSearch($event)'
@@ -462,7 +406,7 @@
                                     <div [innerHTML]="notFound"></div>
                                     </ng-template>
 
-                                    <span class="help-block warning-block" id="invalid-location" *ngIf="showLocationErrorMessage">Location is required</span>
+                                    <span class="help-block warning-block" id="invalid-location" *ngIf="showLocationErrorMessage">State is required</span>
 
                                  </div>
                                     
@@ -474,6 +418,27 @@
                            </div>
                         </div>
                         <!-- End Input -->
+
+                        <div class="col-sm-6 mb-2">
+                           <div class="js-form-message">
+                              <label class="form-label">
+                              Preferred language
+                              <span class="text-danger">*</span>
+                              </label>
+                              <div class="form-group">
+                                 <select class="form-control custom-select" [ngClass]="{ 'is-invalid': submitted && f.language.errors }" formControlName="language" placeholder="Select language" aria-label="Select language">
+                                    <option value="">Select language</option>
+                                    <option *ngFor="let language of languages" value="{{language.id}}">{{language.name}}</option>
+                                    
+                                 </select>
+                                 <div *ngIf="submitted && f.language.errors" class="invalid-feedback">
+                                    <div *ngIf="f.language.errors.required">Language is required</div>
+                              </div>
+
+                              </div>
+                           </div>
+                        </div>
+                        
                      </div>
                      <div class="row">
                         <!-- Input -->
@@ -591,30 +556,7 @@
                            </div>
                         </div>
                         </div>
-                        <!-- End Input -->
-                        <div class="row">
-                        <!-- Input -->
-                        <div class="col-sm-6 mb-2">
-                           <div class="js-form-message">
-                              <label class="form-label">
-                              Preferred language
-                              <span class="text-danger">*</span>
-                              </label>
-                              <div class="form-group">
-                                 <select class="form-control custom-select" [ngClass]="{ 'is-invalid': submitted && f.language.errors }" formControlName="language" placeholder="Select language" aria-label="Select language">
-                                    <option value="">Select language</option>
-                                    <option *ngFor="let language of languages" value="{{language.id}}">{{language.name}}</option>
-                                    
-                                 </select>
-                                 <div *ngIf="submitted && f.language.errors" class="invalid-feedback">
-                                    <div *ngIf="f.language.errors.required">Language is required</div>
-                              </div>
-
-                              </div>
-                           </div>
-                        </div>
-                        <!-- End Input -->
-                     </div>
+                        
                   
                </div>
             </div>
@@ -715,7 +657,7 @@
             </div>
 
             <div class="mb-3 text-right">
-               <a class="font-weight-bold btn btn-link rounded p-3" href="#"> &nbsp;&nbsp;&nbsp;&nbsp; Cancel &nbsp;&nbsp;&nbsp;&nbsp; </a>
+               <a class="font-weight-bold btn btn-link rounded p-3" href="#" (click)="cancelRegForm(); false;"> &nbsp;&nbsp;&nbsp;&nbsp; Cancel &nbsp;&nbsp;&nbsp;&nbsp; </a>
                <button [disabled]="loading" class="btn btn-primary">
                   <span *ngIf="loading" class="spinner-border spinner-border-sm mr-1"></span>
                   Update Changes

@@ -1,8 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators, FormArray , AbstractControl } from '@angular/forms';
 import { Router } from '@angular/router';
 import { first } from 'rxjs/operators';
-import { AlertService } from './../_services';
 import { ConfirmPasswordValidator } from './../_validators/confirm-password.validator';
 import { CommonService } from '../_services/common.service';
 import { RegisterService } from '../_services/register.service';
@@ -10,7 +9,9 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import months from './../_helpers/months.json';
 import dates from './../_helpers/dates.json';
 import { SearchCountryField, TooltipLabel, CountryISO } from 'ngx-intl-tel-input';
-
+import { NgxSpinnerService } from "ngx-spinner";
+import { AlertsService } from 'angular-alert-module';
+import { ConfirmationDialogService } from './../confirmation-dialog-component/confirmation-dialog-service';
 
 declare var jQuery: any;
 declare var $: any;
@@ -19,7 +20,7 @@ declare var $: any;
     selector: 'facehiring-registration',
     templateUrl: './registration.component.html',
     styleUrls: ['./registration.component.css'],
-    providers: [CommonService]
+    providers: [CommonService , ConfirmationDialogService]
 })
 export class RegistrationComponent implements OnInit {
 
@@ -68,15 +69,18 @@ export class RegistrationComponent implements OnInit {
     public isEmailAvailable = true;
     public isPhoneAvailable = true;
 
+    public countExp = 1;
+    public countEdu = 1;
     constructor(
         private formBuilder: FormBuilder,
         private router: Router,
         //  private authenticationService: AuthenticationService,
         // private userService: UserService,
-        private alertService: AlertService,
         private CommonService_: CommonService,
-        private RegisterService_:RegisterService
-        
+        private RegisterService_:RegisterService,
+        private spinner: NgxSpinnerService,
+        private alerts: AlertsService,
+        private confirmationDialogService: ConfirmationDialogService
     ) {
         // redirect to home if already logged in
     }
@@ -203,12 +207,14 @@ export class RegistrationComponent implements OnInit {
                         Validators.pattern(/^[a-z\d\-_\s]+$/i)
                     ] 
                 ],
-                fileInput: [
-                    '', Validators.required
-                            ,],
-                fileInputSource:[]
-                
-
+                fileInput: ['', Validators.required],
+                fileInputSource:[],
+                exps: this.formBuilder.array([
+                    this.formBuilder.control(null)
+                  ]),
+                edus:this.formBuilder.array([
+                    this.formBuilder.control(null)
+                  ])
 
 
         },
@@ -240,7 +246,240 @@ export class RegistrationComponent implements OnInit {
       }
      */
 
-      
+    addExp(index): void {
+        
+      if(index == 0)
+      {
+        this.countExp= 1; 
+      }
+
+        let isValid = true;
+        $("#errorMsg"+index).html('');
+        $("#errorMsg"+index).hide();
+
+        $("#fromDateErrorMsg"+index).html('');
+        $("#fromDateErrorMsg"+index).hide();
+        $("#toDateErrorMsg"+index).html('');
+        $("#toDateErrorMsg"+index).hide();
+        $("#companyErrorMsg"+index).html('');
+        $("#companyErrorMsg"+index).hide();
+        $("#poitionErrorMsg"+index).html('');
+        $("#poitionErrorMsg"+index).hide();
+
+        if($("#fromDate"+index).val() == '')
+        {
+            isValid = false;
+            $("#errorMsg"+index).html('From date is required');
+            $("#errorMsg"+index).show();
+            return;
+        }
+
+        /*
+        if($("#toDate"+index).val() == '')
+        {
+            isValid = false;
+            $("#errorMsg"+index).html('To date is required');
+            $("#errorMsg"+index).show();
+            return;
+        }
+        */
+
+
+        if($("#fromDate"+index).val()!='' && $("#toDate"+index).val()!='')
+        {
+            let fromDateStamp = new Date($("#fromDate"+index).val());
+            let toDateStamp = new Date($("#toDate"+index).val());
+
+            if(fromDateStamp > toDateStamp)
+            {
+                isValid = false;
+                $("#errorMsg"+index).html('From date should be greater than the to date');
+                $("#errorMsg"+index).show();
+                return;
+            }
+        }
+        
+        if(index > 0)
+        {
+            if($("#fromDate"+index).val()!='')
+            {   
+
+                let fromDateStamp = new Date($("#fromDate"+index).val());
+
+                if($("#toDate"+(index-1)).val()!='')
+                {
+                    let toDateStamp = new Date($("#toDate"+(index-1)).val());
+                    if(fromDateStamp < toDateStamp)
+                    {
+                        isValid = false;
+                        $("#errorMsg"+index).html('From date should be greater than the previous to date');
+                        $("#errorMsg"+index).show();
+                        return;
+                    }
+                }
+                else{
+
+                    isValid = false;
+                    $("#errorMsg"+index).html('From date should be greater than the previous to date');
+                    $("#errorMsg"+index).show();
+                    return;
+                }
+            }
+        }
+        if($("#ddlCompany"+index).val() == '')
+        {
+            isValid = false;
+            $("#errorMsg"+index).html('Company name is required');
+            $("#errorMsg"+index).show();
+            return;
+        }
+
+        if($("#ddlPosition"+index).val() == '')
+        {
+            isValid = false;
+            $("#errorMsg"+index).html('Position name is required');
+            $("#errorMsg"+index).show();
+            return;
+        }
+    if(isValid)
+    {
+        (this.registerForm.get('exps') as FormArray).push(
+            this.formBuilder.control(null)
+        );
+    }
+
+  }
+
+  removeExp(index) {
+      if(index == 0)
+      {
+        this.countExp= 0; 
+      }
+   (this.registerForm.get('exps') as FormArray).removeAt(index);
+  }
+
+  expFormControls(): AbstractControl[] {
+    return (<FormArray> this.registerForm.get('exps')).controls
+  }
+
+  /* Education */
+  addEdu(index): void {
+    
+      if(index == 0)
+      {
+        this.countEdu= 1; 
+      }
+
+    let isValid = true;
+    
+    $("#errorMsg_edu"+index).html('');
+    $("#errorMsg_edu"+index).hide();
+    
+
+    $("#fromDateErrorMsg_edu"+index).html('');
+    $("#fromDateErrorMsg_edu"+index).hide();
+    $("#toDateErrorMsg_edu"+index).html('');
+    $("#toDateErrorMsg_edu"+index).hide();
+    $("#classErrorMsg_edu"+index).html('');
+    $("#classErrorMsg_edu"+index).hide();
+    $("#collegeErrorMsg_edu"+index).html('');
+    $("#collegeErrorMsg_edu"+index).hide();
+
+    if($("#fromDate_edu"+index).val() == '')
+    {
+        isValid = false;
+        $("#errorMsg_edu"+index).html('From date is required');
+        $("#errorMsg_edu"+index).show();
+        return;
+    }
+
+    /*
+    if($("#toDate_edu"+index).val() == '')
+    {
+        isValid = false;
+        $("#errorMsg_edu"+index).html('To date is required');
+        $("#errorMsg_edu"+index).show();
+        return;
+    }
+    */
+
+    if($("#fromDate_edu"+index).val()!='' && $("#toDate_edu"+index).val()!='')
+    {
+        let fromDateStamp = new Date($("#fromDate_edu"+index).val());
+
+        let toDateStamp = new Date($("#toDate_edu"+index).val());
+        if(fromDateStamp > toDateStamp)
+        {
+            isValid = false;
+            $("#errorMsg_edu"+index).html('From date should not be greater than the to date');
+            $("#errorMsg_edu"+index).show();
+            return;
+        }
+    }
+    
+    if(index > 0)
+    {
+        if($("#fromDate_edu"+index).val()!='')
+        {
+            let fromDateStamp = new Date($("#fromDate_edu"+index).val());
+
+            if($("#toDate_edu"+(index-1)).val()!='')
+            {
+                let toDateStamp = new Date($("#toDate_edu"+(index-1)).val());
+                if(fromDateStamp < toDateStamp)
+                {
+                    isValid = false;
+                    $("#errorMsg_edu"+index).html('From date should be greater than the previous to date');
+                    $("#errorMsg_edu"+index).show();
+                    return;
+                }
+            }else{
+                    isValid = false;
+                    $("#errorMsg_edu"+index).html('From date should be greater than the previous to date');
+                    $("#errorMsg_edu"+index).show();
+                    return;
+            }
+        }
+    }
+    if($("#ddlClass_edu"+index).val() == '')
+    {
+        isValid = false;
+        $("#errorMsg_edu"+index).html('Class name is required');
+        $("#errorMsg_edu"+index).show();
+        return;
+    }
+
+    if($("#ddlColleges_edu"+index).val() == '')
+    {
+        isValid = false;
+        $("#errorMsg_edu"+index).html('College/University name is required');
+        $("#errorMsg_edu"+index).show();
+        return;
+    }
+if(isValid)
+{
+    (this.registerForm.get('edus') as FormArray).push(
+        this.formBuilder.control(null)
+    );
+}
+
+}
+
+removeEdu(index) {
+    if(index == 0)
+      {
+        this.countEdu= 0; 
+      }
+(this.registerForm.get('edus') as FormArray).removeAt(index);
+}
+
+eduFormControls(): AbstractControl[] {
+return (<FormArray> this.registerForm.get('edus')).controls
+}
+
+/* education */
+
+
      onFileChange(event) {
         let reader = new FileReader();
         if (event.target.files && event.target.files.length > 0) {
@@ -346,37 +585,295 @@ export class RegistrationComponent implements OnInit {
 
     onSubmit() {
         this.submitted = true;
+        let expEduValidate = true;
         $("#phoneAvailability").hide();
-        
+
         // reset alerts on submit
         // this.alertService.clear();
         // this.showLocationErrorMessage = true;
         this.showSkillErrorMessage = true;
         // stop here if form is invalid
         // console.log(this.selectedSkillItems);
-          console.log(this.selectedSkillItems.length);
-          if(this.selectedSkillItems.length == 0)
-          {
-            this.showSkillErrorMessage = true;
-              return;
-          } else {
-            this.showSkillErrorMessage = false;
-          }
+        
+         if(this.selectedSkillItems.length == 0)
+              {
+                this.showSkillErrorMessage = true;
+              } else {
+                this.showSkillErrorMessage = false;
+              }
+
+          
+
+            //else{
+            //    this.showSkillErrorMessage = false;
+           // }
+            
+            /** Exp validation */
+            $("input[name='fromDate[]']").each(function(index, value) {
+                
+                console.log('first name required');
+
+                $("#fromDateErrorMsg"+index).hide();
+                $("#fromDateErrorMsg"+index).html('');
+                $("#errorMsg"+index).html('');
+                $("#errorMsg"+index).hide();
+                
+                if ($(this).val() == "") {
+                    $("#fromDateErrorMsg"+index).show();
+                    $("#fromDateErrorMsg"+index).html('From date should not be blank');
+                    expEduValidate = false;
+                }
+
+                if(index > 0)
+                {
+                    if($("#fromDate"+index).val()!='')
+                    {
+                        let fromDateStamp = new Date($("#fromDate"+index).val());
+
+                        if($("#toDate"+(index-1)).val()!='')
+                        {
+                            let toDateStamp = new Date($("#toDate"+(index-1)).val());
+                            if(fromDateStamp < toDateStamp)
+                            {
+                                $("#fromDateErrorMsg"+index).html('From date should be greater than the previous to date');
+                                $("#fromDateErrorMsg"+index).show();
+                                expEduValidate = false;;
+                            }
+                        }
+                        else{
+                                 $("#fromDateErrorMsg"+index).html('From date should be greater than the previous to date');
+                                $("#fromDateErrorMsg"+index).show();
+                                expEduValidate = false;;
+                        }
+                    }
+                }
+
+              });
+            
+              $("input[name='toDate[]']").each(function(index, value) {
+                $("#toDateErrorMsg"+index).hide();
+                $("#toDateErrorMsg"+index).html('');
+
+                /*
+                if ($(this).val() == "") {
+                    $("#toDateErrorMsg"+index).show();
+                    $("#toDateErrorMsg"+index).html('To date should not be blank');
+                    return;
+                }
+                */
+
+                if($("#fromDate"+index).val()!='' && $("#toDate"+index).val()!='')
+                {
+                    let fromDateStamp = new Date($("#fromDate"+index).val());
+                    let toDateStamp = new Date($("#toDate"+index).val());
+
+                    if(fromDateStamp > toDateStamp)
+                    {
+                        $("#toDateErrorMsg"+index).html('From date should not be greater than the to date');
+                        $("#toDateErrorMsg"+index).show();
+                        expEduValidate = false;;
+                    }
+                }
+              });
+            
+             
+            $("input[name='ddlCompany[]']").each(function(index, value) {
+                
+                console.log('index'+index);
+
+                $("#companyErrorMsg"+index).hide();
+                $("#companyErrorMsg"+index).html('');
+
+                if ($(this).val() == "") {
+                    
+                    console.log('error');
+
+                    $("#companyErrorMsg"+index).show();
+                    $("#companyErrorMsg"+index).html('Company name should not be blank');
+                    expEduValidate = false;;
+                }
+                else{
+                    var re = /^[ A-Za-z0-9_@.,-/+-]*$/
+                    if (!re.test($(this).val())) {
+                        $("#companyErrorMsg"+index).show();
+                        $("#companyErrorMsg"+index).html('Company name should not allow special characters');
+                        expEduValidate = false;;
+                    }
+                }
+              });
+
+            $("input[name='ddlPositions[]']").each(function(index, value) {
+                
+                console.log('index12'+index);
+
+                $("#poitionErrorMsg"+index).hide();
+                $("#poitionErrorMsg"+index).html('');
+
+                if ($(this).val() == "") {
+
+                    console.log('error1');
+
+
+                    $("#poitionErrorMsg"+index).show();
+                    $("#poitionErrorMsg"+index).html('Position name should not be blank');
+                    expEduValidate = false;;
+                }
+                else{
+                    var re = /^[ A-Za-z0-9_@.,-/+-]*$/
+                    if (!re.test($(this).val())) {
+                        $("#poitionErrorMsg"+index).show();
+                        $("#poitionErrorMsg"+index).html('Position name should not allow special characters');
+                        expEduValidate = false;;
+                    }
+                }
+              });
+
+
+            /** End exp validation */
+            
+            /** Edu validation */
+          
+            $("input[name='fromDate_edu[]']").each(function(index, value) {
+                $("#fromDateErrorMsg_edu"+index).hide();
+                $("#fromDateErrorMsg_edu"+index).html('');
+                $("#errorMsg_edu"+index).html('');
+                $("#errorMsg_edu"+index).hide();
+    
+
+                if ($(this).val() == "") {
+                    $("#fromDateErrorMsg_edu"+index).show();
+                    $("#fromDateErrorMsg_edu"+index).html('From date should not be blank');
+                    expEduValidate = false;;
+                }
+
+                if(index > 0)
+                {
+                    if($("#fromDate_edu"+index).val()!='')
+                    {
+                        let fromDateStamp = new Date($("#fromDate_edu"+index).val());
+                        if($("#toDate_edu"+(index-1)).val()!='')
+                        {
+                            let toDateStamp = new Date($("#toDate_edu"+(index-1)).val());
+                            if(fromDateStamp < toDateStamp)
+                            {
+                                $("#fromDateErrorMsg_edu"+index).html('From date should be greater than the previous to date');
+                                $("#fromDateErrorMsg_edu"+index).show();
+                                expEduValidate = false;;
+                            }
+                        }else{
+                                $("#fromDateErrorMsg_edu"+index).html('From date should be greater than the previous to date');
+                                $("#fromDateErrorMsg_edu"+index).show();
+                                expEduValidate = false;;
+                        }
+                    }
+                }
+
+              });
+            
+              $("input[name='toDate_edu[]']").each(function(index, value) {
+                $("#toDateErrorMsg_edu"+index).hide();
+                $("#toDateErrorMsg_edu"+index).html('');
+
+                /*
+                if ($(this).val() == "") {
+                    $("#toDateErrorMsg_edu"+index).show();
+                    $("#toDateErrorMsg_edu"+index).html('To date should not be blank');
+                    return;
+                }
+                */
+
+                if($("#fromDate_edu"+index).val()!='' && $("#toDate_edu"+index).val()!='')
+                {
+                    let fromDateStamp = new Date($("#fromDate_edu"+index).val());
+                    let toDateStamp = new Date($("#toDate_edu"+index).val());
+
+                    if(fromDateStamp > toDateStamp)
+                    {
+                        $("#toDateErrorMsg_edu"+index).html('From date should not be greater than the to date');
+                        $("#toDateErrorMsg_edu"+index).show();
+                        expEduValidate = false;;
+                    }
+                }
+              });
+            
+             
+            $("input[name='ddlClass_edu[]']").each(function(index, value) {
+                
+                console.log('index'+index);
+
+                $("#classErrorMsg_edu"+index).hide();
+                $("#classErrorMsg_edu"+index).html('');
+
+                if($(this).val() == "") {
+                    
+                    console.log('error');
+
+                    $("#classErrorMsg_edu"+index).show();
+                    $("#classErrorMsg_edu"+index).html('Education should not be blank');
+                    expEduValidate = false;;
+                }
+                else{
+                    var re = /^[ A-Za-z0-9_@.,-/+-]*$/
+                    if (!re.test($(this).val())) {
+                        $("#classErrorMsg_edu"+index).show();
+                        $("#classErrorMsg_edu"+index).html('Education should not allow special characters');
+                        expEduValidate = false;;
+                    }
+                }
+              });
+
+            $("input[name='ddlColleges_edu[]']").each(function(index, value) {
+                
+
+                $("#collegeErrorMsg_edu"+index).hide();
+                $("#collegeErrorMsg_edu"+index).html('');
+
+                if($(this).val() == "") {
+
+                    console.log('error1');
+
+
+                    $("#collegeErrorMsg_edu"+index).show();
+                    $("#collegeErrorMsg_edu"+index).html('College/University name should not be blank');
+                    expEduValidate = false;;
+                }
+                else{
+                    var re = /^[ A-Za-z0-9_@.,-/+-]*$/
+                    if (!re.test($(this).val())) {
+                        $("#collegeErrorMsg_edu"+index).show();
+                        $("#collegeErrorMsg_edu"+index).html('College/University name should not allow special characters');
+                        expEduValidate = false;;
+                    }
+                }
+              });
+
+
+            /** End Edu validation */
 
             if (this.registerForm.invalid) {
                 console.log('invalid');
+                window.scrollTo({ top: 0, behavior: 'smooth' });
                 this.findInvalidControls();
                 return;
             }
+            if(!expEduValidate)
+            {
+                console.log('here');
+               return;
+              }
+              // this.spinner.show();
+             
 
-            
-            else{
-                this.showSkillErrorMessage = false;
-            }
-            
-           this.openwaitdialog('<img src="assets/img/loading.gif">',200);
 
-           console.log(this.registerForm.value);
+            /** End Edu validation */
+
+
+             // return;
+
+
+            this.spinner.show();
+
+           // console.log(this.registerForm.value);
            const formData = new FormData();
           
            formData.append('firstName', this.registerForm.value.firstName);
@@ -404,17 +901,57 @@ export class RegistrationComponent implements OnInit {
            formData.append('TwitterLink', this.registerForm.value.TwitterLink);     
            formData.append('YoutubeLink', this.registerForm.value.YoutubeLink);     
            formData.append('GithubLink', this.registerForm.value.GithubLink);     
-           formData.append('fromDate1', this.registerForm.value.fromDate1);     
-           formData.append('toDate1', this.registerForm.value.toDate1);     
+           // formData.append('fromDate1', this.registerForm.value.fromDate1);     
+           // formData.append('toDate1', this.registerForm.value.toDate1);     
            formData.append('fileSource', this.registerForm.value.fileSource);     
            formData.append('file', this.registerForm.get('fileSource').value);
           //  formData.append('ddlCompany1', this.selectedCompany['id']);     
           //  formData.append('ddlPosition1', this.selectedPosition['id']);     
           formData.append('fileInput', this.registerForm.value.fileInputSource);     
           formData.append('resume', this.registerForm.get('fileInput').value);
-         formData.append('ddlCompany1', this.registerForm.value.ddlCompany1);
-         formData.append('ddlPosition1', this.registerForm.value.ddlPosition1);
-           formData.append('skills', this.slectedSkillItemString);     
+         // formData.append('ddlCompany1', this.registerForm.value.ddlCompany1);
+         // formData.append('ddlPosition1', this.registerForm.value.ddlPosition1);
+           formData.append('skills', this.slectedSkillItemString);
+          // formData.append('exps', this.registerForm.value.exps);
+
+          $("input[name='fromDate[]']").each(function(index, value) {
+            formData.append('fromDate[]', $(this).val());
+          });
+          $("input[name='toDate[]']").each(function(index, value) {
+            formData.append('toDate[]', $(this).val());
+          });
+          $("input[name='ddlCompany[]']").each(function(index, value) {
+            formData.append('ddlCompany[]', $(this).val());
+          });
+
+          $("input[name='ddlPositions[]']").each(function(index, value) {
+            formData.append('ddlPosition[]', $(this).val());
+          });
+
+          $("input[name='description[]']").each(function(index, value) {
+            formData.append('description[]', $(this).val());
+          });
+
+
+          $("input[name='fromDate_edu[]']").each(function(index, value) {
+            formData.append('fromDate_edu[]', $(this).val());
+          });
+          $("input[name='toDate_edu[]']").each(function(index, value) {
+            formData.append('toDate_edu[]', $(this).val());
+          });
+          $("input[name='ddlClass_edu[]']").each(function(index, value) {
+            formData.append('ddlClass_edu[]', $(this).val());
+          });
+
+          $("input[name='ddlColleges_edu[]']").each(function(index, value) {
+            formData.append('ddlColleges_edu[]', $(this).val());
+          });
+
+          $("input[name='description_edu[]']").each(function(index, value) {
+            formData.append('description_edu[]', $(this).val());
+          });
+
+
            
             const _that = this;
             this.RegisterService_
@@ -422,28 +959,31 @@ export class RegistrationComponent implements OnInit {
             .subscribe((resp) => {
                 // const respMsg = "Thank you for that information. We will log this request to be completed within 30 days";
                //  this.showFlashMsg(respMsg,"success");
-                console.log(resp);
-                console.log(resp.status_code);
+               //  console.log(resp);
+                // console.log(resp.status_code);
 
               if(resp.status_code == '201')
               {
-                   this.closewaitdialog(); 
-                   this.openwaitdialog(resp.message, 600); 
-                   this.closewaitdialog();  
+                this.spinner.hide();
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+                this.alerts.setDefaults('timeout',500);
+                this.alerts.setMessage(resp.message,'error');
                    $("#primaryPhoneNumber").val('');
                    $("#phoneAvailability").html(resp.message);
                    $("#phoneAvailability").show();
+                   return;
 
               } 
               else {
-               $('#waitDialog').dialog('close');
-               this.openwaitdialog('Thank you. Your registration has been completed.', 600);
-               this.closewaitdialog();
-                
-               setTimeout(function(){
-                window.location.href = '/';
-               }, 2000);
                
+                this.spinner.hide();
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+                $('.alertsContainer .alertsRow.error').attr("style", "display: none !important");
+                this.alerts.setMessage('Thank you. Your registration has been completed! Please check your email to activate the facehiring account! Please wait ..' ,'success');
+                        
+                setTimeout(function(){
+                    window.location.href = '/';
+                   }, 2000);
                
               }
               
@@ -659,7 +1199,14 @@ export class RegistrationComponent implements OnInit {
     {
        $("#phoneAvailability").hide();
     }
-   
+    
+    cancelRegForm()
+    {
+     this.confirmationDialogService.confirm('Please confirm..', 'Do you want to cancel')
+    .then((confirmed) => {if(confirmed){window.location.href = '/';}})
+    .catch(() => console.log('User dismissed the dialog (e.g., by using ESC, clicking the cross icon, or clicking outside the dialog)'));
+
+    }
 
 }
 

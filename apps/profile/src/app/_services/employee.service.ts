@@ -185,6 +185,17 @@ export class EmployeeService {
         {employeeID:employeeID},
         ).pipe(map((data: any) => data.data));
   }
+
+  getApprovedNotifications(employeeID:any)
+  {
+    const api = this.env.apiBaseURL+'/getApprovedNotifications';
+    return this.http.post(
+        api,
+        {employeeID:employeeID},
+        ).pipe(map((data: any) => data.data));
+  }
+
+
   acceptRequest(connectID:any)
   {
     const api = this.env.apiBaseURL+'/acceptRequest';
@@ -235,6 +246,102 @@ export class EmployeeService {
         ).pipe(map((data: any) => data));
   }
 
-  
+  getMyProfileBasicInfo(employeeID:any)
+  {
+    const api = this.env.apiBaseURL+'/getMyProfileBasicInfo';
+    return this.http.post(
+        api,
+        {employeeID:employeeID},
+        ).pipe(map((data: any) => data.data));
+  }
+
+  getMyProfileSkillInfo(employeeID:any)
+  {
+    const api = this.env.apiBaseURL+'/getMyProfileSkillInfo';
+    return this.http.post(
+        api,
+        {employeeID:employeeID},
+        ).pipe(map((data: any) => data.data));
+  }
+
+  getMyProfileExp(employeeID:any)
+  {
+    const api = this.env.apiBaseURL+'/getMyProfileExp';
+    return this.http.post(
+        api,
+        {employeeID:employeeID},
+        ).pipe(map((data: any) => data.data));
+  }
+  geViewedCompanyProfiles(employeeID:any)
+  {
+    const api = this.env.apiBaseURL+'/geViewedCompanyProfiles';
+    return this.http.post(
+        api,
+        {employeeID:employeeID},
+        ).pipe(map((data: any) => data.data));
+  }
+  getMyProfileEducation(employeeID:any)
+  {
+    const api = this.env.apiBaseURL+'/getMyProfileEducation';
+    return this.http.post(
+        api,
+        {employeeID:employeeID},
+        ).pipe(map((data: any) => data.data));
+  }
+
+  deletePost(postID)
+  {
+    const api = this.env.apiBaseURL+'/deletePost';
+    return this.http.post(
+        api,
+        {postID:postID},
+        ).pipe(map((data: any) => data.data));
+  }
+
+  getMyConnects(employeeID:any)
+  {
+    const api = this.env.apiBaseURL+'/getMyConnects';
+    return this.http.post(
+        api,
+        {employeeID:employeeID},
+        ).pipe(map((data: any) => data.data));
+  }
+
+  countUpdate(employeeID:any, viewUserID:any)
+  {
+    const api = this.env.apiBaseURL+'/countUpdate';
+    return this.http.post(
+        api,
+        {employeeID:employeeID, viewUserID:viewUserID},
+        ).pipe(map((data: any) => data.data));
+  }
+
+  getNotifications(employeeID:any)
+  {
+    const api = this.env.apiBaseURL+'/getNotifications';
+    return this.http.post(
+        api,
+        {employeeID:employeeID},
+        ).pipe(map((data: any) => data.data));
+  }
+
+  acceptRequestNotification(ID:any, category:any)
+  {
+    const api = this.env.apiBaseURL+'/acceptRequestNotification';
+    return this.http.post(
+        api,
+        {ID:ID , category:category},
+        ).pipe(map((data: any) => data.data));
+  }
+
+
+  acceptApproveRequest(connectID:any)
+  {
+    const api = this.env.apiBaseURL+'/acceptApproveRequest';
+    return this.http.post(
+        api,
+        {connectID:connectID},
+        ).pipe(map((data: any) => data.data));
+  }
 
 }

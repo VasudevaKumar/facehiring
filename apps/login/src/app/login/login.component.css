@@ -1,8 +1,8 @@
 .registration-login-form{
-    min-height:350px !important;
+    min-height:120px !important;
   }
   .landing-content{
-    min-height:350px !important;
+    min-height:120px !important;
   }
   .btn-md{
     font-size: 0.85rem;
@@ -14,4 +14,25 @@
   }
   .forgotClass{
     float: right; margin-right: 15px;
+  }
+  #signUpContainer{
+    margin-top:150px;
+  }
+  .toprightCorner{
+    padding-top:0px;
+  }
+  #loginDialog{
+    display:none;
+  }
+  .wellcomeBigText{
+    padding:0px; margin:0px; color:white; font-weight: bold;
+  }
+  .wellcomSmallText{
+    padding:0px; margin:0px; color:white; font-weight: normal;
+  }
+  .mb-10{
+    margin-bottom:10px;
+  }
+  .pl-3{
+    padding-left:3px !important;
   }

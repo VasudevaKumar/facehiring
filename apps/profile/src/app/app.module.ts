@@ -2,14 +2,6 @@ import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { AppComponent } from './app.component';
 import { RouterModule, Routes } from '@angular/router';
-import { HomecomponentComponent } from './homecomponent/homecomponent.component';
-import { ProfilecomponentComponent } from './profilecomponent/profilecomponent.component';
-import { EditprofilecomponentComponent } from './editprofilecomponent/editprofilecomponent.component';
-import { ConnectioncomponentComponent } from './connectioncomponent/connectioncomponent.component';
-import { MenucomponentComponent } from './menucomponent/menucomponent.component';
-
-import {HeaderwithoutsearchModule} from '../../../../libs/headerwithoutsearch/src/index';
-import { RegistrationComponent } from './registration/registration.component';
 import { ReactiveFormsModule, FormsModule } from '@angular/forms';
 import {HttpClientModule} from '@angular/common/http';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
@@ -23,30 +15,77 @@ import { NgxIntlTelInputModule } from 'ngx-intl-tel-input';
 import { CommonModule } from '@angular/common';
 import { Pipe, PipeTransform } from '@angular/core';
 import { ImageCropperModule } from 'ngx-image-cropper';
-import { NgChatModule } from 'ng-chat';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
+import { NgxSpinnerModule } from "ngx-spinner";
+import { AlertsModule } from 'angular-alert-module';
+import { AngularEditorModule } from '@kolkov/angular-editor';
+
+import { AdminGuard } from  './../../../../_services/admin.guard';
+import { HomecomponentComponent } from './homecomponent/homecomponent.component';
+import { ProfilecomponentComponent } from './profilecomponent/profilecomponent.component';
+import { EditprofilecomponentComponent } from './editprofilecomponent/editprofilecomponent.component';
+import { ConnectioncomponentComponent } from './connectioncomponent/connectioncomponent.component';
+import { MenucomponentComponent } from './menucomponent/menucomponent.component';
+import { RegistrationComponent } from './registration/registration.component';
+import { ChangePasswordComponent } from './change-password/change-password.component';
+import { JobSearchComponent } from './job-search/job-search.component';
+import { JobdetailComponent } from './jobdetail/jobdetail.component';
+import { MyjobsComponent } from './myjobs/myjobs.component';
+import { ConfirmationDialogComponentComponent } from './confirmation-dialog-component/confirmation-dialog-component.component';
 
 const appRoutes:Routes = [
   {
       path : '', 
-      component:HomecomponentComponent
+      canActivate: [AdminGuard],
+      component:HomecomponentComponent,
+      
   },
   {
-      path : 'profile',
+      path : 'myProfile',
+      canActivate: [AdminGuard],
       component:ProfilecomponentComponent
   },
   {
       path : 'editprofile',
+      canActivate: [AdminGuard],
       component:EditprofilecomponentComponent
   },
   {
       path : 'connections',
+      canActivate: [AdminGuard],
       component:ConnectioncomponentComponent
   },
+  
   {
     path : 'signup',
     component:RegistrationComponent
-}
+  },
+  
+  {
+    path : 'changePassword',
+    component:ChangePasswordComponent,
+    canActivate: [AdminGuard]
+    
+  },
+  {
+    path : 'jobSearch',
+    component:JobSearchComponent,
+    canActivate: [AdminGuard]
+    
+  },
+  {
+    path : 'myjobs',
+    component:MyjobsComponent,
+    canActivate: [AdminGuard]
+    
+  },
+  {
+    path : 'jobdetail',
+    component:JobdetailComponent,
+    canActivate: [AdminGuard]
+    
+  }
+  
 
 ]
 
@@ -65,11 +104,11 @@ export class replaceImg40Pipe implements PipeTransform {
 }
 
 @NgModule({
-  declarations: [AppComponent, ProfilecomponentComponent, ConnectioncomponentComponent, RegistrationComponent , EditprofilecomponentComponent, HomecomponentComponent,replaceImg78Pipe,replaceImg40Pipe,ConnectioncomponentComponent, MenucomponentComponent],
+  declarations: [AppComponent, ProfilecomponentComponent, MyjobsComponent , ConfirmationDialogComponentComponent
+ ,     JobSearchComponent  , JobdetailComponent,  ChangePasswordComponent , ConnectioncomponentComponent, RegistrationComponent , EditprofilecomponentComponent, HomecomponentComponent,replaceImg78Pipe,replaceImg40Pipe,ConnectioncomponentComponent, MenucomponentComponent],
   imports: [
     CommonModule, 
     BrowserModule,
-    HeaderwithoutsearchModule,
     ReactiveFormsModule,
     FormsModule,
     HttpClientModule,
@@ -82,8 +121,10 @@ export class replaceImg40Pipe implements PipeTransform {
     MatNativeDateModule,
    // BsDropdownModule.forRoot(), 
     NgxIntlTelInputModule,
+    AngularEditorModule,
     ImageCropperModule,
-    NgChatModule,
+    NgxSpinnerModule,
+    AlertsModule.forRoot(),
     RouterModule.forRoot(appRoutes),
     FontAwesomeModule,
   ],

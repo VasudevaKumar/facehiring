@@ -4,6 +4,8 @@ import { Router } from '@angular/router';
 import { EmployeeService } from '../_services/employee.service';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { ImageCroppedEvent } from 'ngx-image-cropper';
+import { NgxSpinnerService } from "ngx-spinner";
+import { AngularEditorConfig } from '@kolkov/angular-editor';
 
 declare var jQuery: any;
 declare var $: any;
@@ -30,22 +32,54 @@ export class HomecomponentComponent implements OnInit {
   peopleWhoMayKnow=[];
   employeeHomePagePics=[];
   postComments=[];
+  totalConnects = [];
   isEmployeeProfileLoaded = false;
   ImageSizeerror:boolean = false;
   ImageTypeeerror:boolean = false;
   isPostEmpty = false;
   public thoughts = '';
   
+  
   fileToReturn:any;
   data:any;
 
   imageSrcLeft: string;
   imageSrcRight: string;
+  isContentLoaded = false;
 
+  config: AngularEditorConfig = {
+    editable: true,
+    spellcheck: true,
+    height: '10rem',
+    minHeight: '5rem',
+    placeholder: 'Enter text here...',
+    translate: 'no',
+    defaultParagraphSeparator: 'p',
+    defaultFontName: 'Arial',
+    toolbarHiddenButtons: [
+      ['bold']
+      ],
+    customClasses: [
+      {
+        name: "quote",
+        class: "quote",
+      },
+      {
+        name: 'redText',
+        class: 'redText'
+      },
+      {
+        name: "titleText",
+        class: "titleText",
+        tag: "h1",
+      },
+    ]
+  };
   constructor(
     private router: Router,
     private EmployeeService_:EmployeeService,
-    private formBuilder: FormBuilder
+    private formBuilder: FormBuilder,
+    private spinner: NgxSpinnerService
     
 ) {
     // redirect to home if already logged in
@@ -53,9 +87,9 @@ export class HomecomponentComponent implements OnInit {
 
 
   ngOnInit(): void {
+    this.spinner.show();
     this.currentUser = JSON.parse(localStorage.getItem('currentUser'));
-    // this.loggedInEmployeeID  = this.currentUser['data'][0].id;
-     this.loggedInEmployeeID  = 63;
+    this.loggedInEmployeeID  = this.currentUser[0].user_id;
     this.loadContent(this.loggedInEmployeeID);
     // console.log(this.loggedInEmployeeID);
 
@@ -148,21 +182,30 @@ export class HomecomponentComponent implements OnInit {
       const res2 = this.EmployeeService_.getPeopleWhoMayKnow(employeeID).toPromise();
       const res3 = this.EmployeeService_.getEmployeeHomePics(employeeID).toPromise();
       const res4 = this.EmployeeService_.getPosts(employeeID).toPromise();
+      const res5 = this.EmployeeService_.gettotalConnects(employeeID).toPromise();
 
-      let res = await Promise.all([res1, res2, res3, res4]);
+      let res = await Promise.all([res1, res2, res3, res4,res5]);
       //let res = await Promise.all([res1, res4]);
       _that.employeeProfiles = res[0];
        _that.peopleWhoMayKnow = res[1];
       _that.employeeHomePagePics = res[2];
       _that.postComments = res[3];
+      _that.totalConnects = res[4];
+      
       _that.isEmployeeProfileLoaded = true;
 
-      this.imageSrcLeft = this.employeeHomePagePics[0].leftsideimagepath;
-      this.imageSrcRight = this.employeeHomePagePics[0].rightsideimagepath;
+      if(this.employeeHomePagePics.length > 0)
+      {
+        this.imageSrcLeft = this.employeeHomePagePics[0].leftsideimagepath;
+        this.imageSrcRight = this.employeeHomePagePics[0].rightsideimagepath;
+      }
 
-      console.log(_that.postComments);
-      console.log(_that.employeeHomePagePics);
+     // console.log(_that.postComments);
+     // console.log(_that.employeeHomePagePics);
 
+     this.spinner.hide();
+     
+      this.isContentLoaded = true;
       // _that.imageSrcLeft =  _that.isEmployeeProfileLoaded.data
 
     }
@@ -316,6 +359,7 @@ export class HomecomponentComponent implements OnInit {
       .pushPost(this.loggedInEmployeeID , this.thoughts)
       .subscribe((resp) => {})
       .add(() => {
+        this.thoughts = '';
         /*console.log(_that.employeeProfiles['profileData'][0].firstName);*/
         this.postComments= [];
         this.getPosts();
@@ -349,7 +393,7 @@ export class HomecomponentComponent implements OnInit {
      .subscribe((resp) => {})
      .add(() => {
       this.closewaitdialog();
-      $("#shareDiv_"+postID).html(shareCount+1);
+      $("#shareDiv_"+postID).html(parseInt(shareCount)+1);
      });
 
 
@@ -364,9 +408,40 @@ export class HomecomponentComponent implements OnInit {
       .subscribe((resp) => {})
       .add(() => {
         this.closewaitdialog();
-        $("#likeDiv_"+postID).html(likeCount+1);
+        $("#likeDiv_"+postID).html(parseInt(likeCount)+1);
       });
+
+      /* Update Like */
+
+      /*
+      this.changeLik(postID , 'Y');
+
+      _that.postComments = _that.postComments.map(obj =>
+          obj.id === postID ? { ...obj, isLiked: 'Y' } : obj
+      );
+      
+
+    console.log(_that.postComments);
+     _that.postComments.find(v => v.id === postID).isLiked = 'Y';
+*/
+    console.log(_that.postComments);
+     this.changeLik(postID , 'Y');
+     console.log(_that.postComments);
+
     }
+
+    changeLik( postID, st ) {
+      const _that = this;
+
+      for (var i in _that.postComments) {
+        if (_that.postComments[i]['posts'].id == postID) {
+          _that.postComments[i]['posts'].isLiked = st;
+           break; //Stop this loop, we found it!
+        }
+      }
+   }
+
+
     displayMessage(postID)
     {
       $("#commentPost_"+postID).show();
@@ -491,4 +566,33 @@ cropperReadyR() {
     
       return new File([u8arr], filename, { type: mime });
     }
+
+    deletePost(postID)
+    {
+      // alert(postID);
+
+      // this.postComments['posts'] = this.postComments['posts'].filter( ({ id }) => id != postID);
+
+      const _that = this;
+      this.EmployeeService_.deletePost(postID)
+      .subscribe(postComments => (_that.postComments = postComments))
+    .add(() => {
+      /*console.log(_that.employeeProfiles['profileData'][0].firstName);*/
+        this.getPosts();
+    });
+
+    }
+
+    showProfile(userID)
+    {
+      // this.router.navigate(['/profile/myProfile']);
+      localStorage.setItem('searchUser', userID);
+      this.router.navigate(['/myProfile']);
+    }
+
+    preventDefault()
+    {
+      return false;
+    }
+  
 }
