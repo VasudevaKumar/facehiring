@@ -87,9 +87,7 @@
           "builder": "@nrwl/jest:jest",
           "options": {
             "jestConfig": "apps/login/jest.config.js",
-            "tsConfig": "apps/login/tsconfig.spec.json",
-            "passWithNoTests": true,
-            "setupFile": "apps/login/src/test-setup.ts"
+            "passWithNoTests": true
           }
         }
       }
@@ -212,9 +210,7 @@
           "builder": "@nrwl/jest:jest",
           "options": {
             "jestConfig": "apps/profile/jest.config.js",
-            "tsConfig": "apps/profile/tsconfig.spec.json",
             "passWithNoTests": true,
-            "setupFile": "apps/profile/src/test-setup.ts",
             "styles": [
               "./node_modules/bootstrap/dist/css/bootstrap.min.css",
               "./node_modules/ngx-bootstrap/datepicker/bs-datepicker.css"
@@ -270,9 +266,7 @@
           "builder": "@nrwl/jest:jest",
           "options": {
             "jestConfig": "libs/headerwithoutsearch/jest.config.js",
-            "tsConfig": "libs/headerwithoutsearch/tsconfig.spec.json",
-            "passWithNoTests": true,
-            "setupFile": "libs/headerwithoutsearch/src/test-setup.ts"
+            "passWithNoTests": true
           }
         }
       },
@@ -378,9 +372,7 @@
           "builder": "@nrwl/jest:jest",
           "options": {
             "jestConfig": "apps/employee/jest.config.js",
-            "tsConfig": "apps/employee/tsconfig.spec.json",
-            "passWithNoTests": true,
-            "setupFile": "apps/employee/src/test-setup.ts"
+            "passWithNoTests": true
           }
         }
       }
@@ -429,12 +421,10 @@
             "tsConfig": "apps/fhapp/tsconfig.app.json",
             "aot": true,
             "assets": ["apps/fhapp/src/favicon.ico", "apps/fhapp/src/assets"],
-            "styles": [
-              "apps/fhapp/src/styles.css"
-            ],
+            "styles": ["apps/fhapp/src/styles.css"],
             "scripts": [
               "apps/fhapp/src/assets/js/jquery-1.11.1.min.js",
-              "apps/fhapp/src/assets/js/jquery-ui-min.js"          
+              "apps/fhapp/src/assets/js/jquery-ui-min.js"
             ]
           },
           "configurations": {
@@ -499,9 +489,7 @@
           "builder": "@nrwl/jest:jest",
           "options": {
             "jestConfig": "apps/fhapp/jest.config.js",
-            "tsConfig": "apps/fhapp/tsconfig.spec.json",
-            "passWithNoTests": true,
-            "setupFile": "apps/fhapp/src/test-setup.ts"
+            "passWithNoTests": true
           }
         }
       }
