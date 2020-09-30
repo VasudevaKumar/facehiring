@@ -574,7 +574,7 @@
                         <div class="position-relative">
                            <mat-form-field color="accent" style="width: 95%;">
                               <mat-label>From date</mat-label>
-                              <input matInput [matDatepicker]="picker1" formControlName="fromDate1">
+                              <input matInput [matDatepicker]="picker1" [readonly]="true" formControlName="fromDate1">
                               <mat-datepicker-toggle matSuffix [for]="picker1"></mat-datepicker-toggle>
                               <mat-datepicker #picker1></mat-datepicker>
                             </mat-form-field>
@@ -586,7 +586,7 @@
                         <div class="position-relative">
                            <mat-form-field color="accent" style="width: 95%;">
                               <mat-label>To date</mat-label>
-                              <input matInput [matDatepicker]="picker2" formControlName="toDate1">
+                              <input matInput [matDatepicker]="picker2" [readonly]="true" formControlName="toDate1">
                               <mat-datepicker-toggle matSuffix [for]="picker2"></mat-datepicker-toggle>
                               <mat-datepicker #picker2></mat-datepicker>
                             </mat-form-field>
@@ -622,6 +622,27 @@
                      </div>
                   </div>
 
+
+                  <div class="row">
+                     <div class="col-sm-12 mb-4">
+                        <label id="companyLabel" class="form-label">Description</label>
+                        <!-- Input -->
+                           <div class="form-group">
+                             <input type="text" formControlName="description1" class="form-control" 
+                            placeholder="Enter decription" aria-label="Enter decription" style="width:100%;" [ngClass]="{ 'is-invalid': submitted && f.description1.errors }"/>
+
+                            <div *ngIf="submitted && f.description1.errors" class="invalid-feedback">
+                              <div *ngIf="f.description1.errors.pattern">Special characters are not allowed.</div>
+                        </div>
+
+                           </div>
+                           <!-- <span class="help-block warning-block" id="invalid-company" *ngIf="showCompanyErrorMessage">Company is required</span> -->
+
+                       
+                        <!-- End Input -->
+                     </div>
+                  </div>
+
                   <!-- <a class="d-inline-block u-text-muted" href="#">
                      <span class="mr-1">+</span>
                         Add Experience
@@ -637,7 +658,7 @@
                <div class="box-title border-bottom p-3">
                   <h6 class="m-0">Upload Resume.</h6>
                   <div *ngIf="ResumeTypeError" class="warning-block mb-0 mt-0 small">
-                     Only allow files (.doc, .docx, .pdf)</div>
+                     Only allow files (.doc, .docx, .pdf) with less than 1MB size.</div>
                </div>
                <div class="box-body">
                   <div class="p-3 border-bottom">
@@ -657,6 +678,7 @@
             </div>
 
             <div class="mb-3 text-right">
+               <input type ="hidden" name="isPhotoDeleted" id="isPhotoDeleted" value="1">
                <a class="font-weight-bold btn btn-link rounded p-3" href="#" (click)="cancelRegForm(); false;"> &nbsp;&nbsp;&nbsp;&nbsp; Cancel &nbsp;&nbsp;&nbsp;&nbsp; </a>
                <button [disabled]="loading" class="btn btn-primary">
                   <span *ngIf="loading" class="spinner-border spinner-border-sm mr-1"></span>

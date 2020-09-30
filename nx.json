@@ -51,6 +51,13 @@
     "employee-e2e": {
       "tags": [],
       "implicitDependencies": ["employee"]
+    },
+    "fhapp": {
+      "tags": []
+    },
+    "fhapp-e2e": {
+      "tags": [],
+      "implicitDependencies": ["fhapp"]
     }
   }
 }

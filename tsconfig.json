@@ -9,25 +9,40 @@
     "experimentalDecorators": true,
     "importHelpers": true,
     "target": "es2015",
-    "module": "esnext",
-    "typeRoots": ["node_modules/@types"],
-    "lib": ["es2017", "dom"],
+    "module": "commonjs",
+    "typeRoots": [
+      "node_modules/@types"
+    ],
+    "lib": [
+      "es2017",
+      "dom"
+    ],
     "skipLibCheck": true,
     "skipDefaultLibCheck": true,
     "resolveJsonModule": true,
-    "allowSyntheticDefaultImports":true,
+    "allowSyntheticDefaultImports": true,
     "baseUrl": ".",
     "paths": {
-      "@facehiring/header": ["libs/header/src/index.ts"],
+      "@facehiring/header": [
+        "libs/header/src/index.ts"
+      ],
       "@facehiring/headerwithoutsearch": [
         "libs/headerwithoutsearch/src/index.ts"
       ],
-      "@facehiring/headerwithsearch": ["libs/headerwithsearch/src/index.ts"],
-      "@facehiring/topsection": ["libs/topsection/src/index.ts"],
+      "@facehiring/headerwithsearch": [
+        "libs/headerwithsearch/src/index.ts"
+      ],
+      "@facehiring/topsection": [
+        "libs/topsection/src/index.ts"
+      ],
       "@/*": [
         "app/*"
       ]
-    }
+    },
+    "esModuleInterop": true
   },
-  "exclude": ["node_modules", "tmp"]
+  "exclude": [
+    "node_modules",
+    "tmp"
+  ]
 }

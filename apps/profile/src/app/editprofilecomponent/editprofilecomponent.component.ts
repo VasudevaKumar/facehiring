@@ -91,9 +91,10 @@ export class EditprofilecomponentComponent implements OnInit {
     ngOnInit() {
        this.currentUser = JSON.parse(localStorage.getItem('currentUser'));
        this.loggedInEmployeeID  = this.currentUser[0].user_id;
+       this.spinner.show();
        this.myFunction();
        // this.loggedInEmployeeID  = 63;
-        this.getEmployeeProfile(this.loggedInEmployeeID);
+       // this.getEmployeeProfile(this.loggedInEmployeeID);
 
        //  this.selectedSkillItems = [];
         this.EditForm = this.formBuilder.group({
@@ -177,6 +178,11 @@ export class EditprofilecomponentComponent implements OnInit {
                     ]
                 ],
                 ddlPosition1:['',
+                    [
+                        Validators.pattern(/^[a-z\d\-_\s]+$/i)
+                    ] 
+                ],
+                description1:['',
                     [
                         Validators.pattern(/^[a-z\d\-_\s]+$/i)
                     ] 
@@ -284,7 +290,7 @@ export class EditprofilecomponentComponent implements OnInit {
 
 }
 
-
+       /*
       fileEvent(event){
         let files = event.target.files[0].name;
         document.getElementById('fileList').innerHTML = files;
@@ -295,6 +301,38 @@ export class EditprofilecomponentComponent implements OnInit {
             });
 
     }
+    */
+
+    
+        fileEvent(event){
+        this.ResumeTypeError = false;  
+
+        var iSize = event.target.files[0].size / 1024; 
+        iSize = (Math.round(iSize * 100) / 100)
+        // $("#size").html( iSize  + "kb"); 
+        if(iSize<=1024)
+        {
+            let resumeValue = $("#file-upload").val();
+                var ext = resumeValue.split('.').pop();
+                if(ext=="pdf" || ext=="docx" || ext=="doc"){
+                    let files = event.target.files[0].name;
+                    document.getElementById('fileList').innerHTML = files;
+                    // this.registerForm.controls['fileInput'].setValue(files ? files.name : '');
+                    const fileInput = event.target.files[0];
+                        this.EditForm.patchValue({
+                            fileInputSource: fileInput
+                        });
+                } else{
+                        // console.log('error');
+                        this.ResumeTypeError = true;
+                        document.getElementById('fileList').innerHTML = '';
+                }
+            } // size less than 1024
+            else{
+                this.ResumeTypeError = true;
+                document.getElementById('fileList').innerHTML = '';
+            }
+        }
     removeFileLink()
     {
         document.getElementById('fileList').innerHTML = '';
@@ -367,6 +405,7 @@ export class EditprofilecomponentComponent implements OnInit {
             // formData.append('ddlPosition1', this.selectedPosition['id']);     
             formData.append('ddlCompany1', this.EditForm.value.ddlCompany1);
          formData.append('ddlPosition1', this.EditForm.value.ddlPosition1);
+         formData.append('description1', this.EditForm.value.description1);
 
            formData.append('fileInput', this.EditForm.value.fileInputSource);     
          //  formData.append('resume', this.EditForm.get('fileInput').value);
@@ -398,10 +437,12 @@ export class EditprofilecomponentComponent implements OnInit {
                 window.scrollTo({ top: 0, behavior: 'smooth' });
                 $('.alertsContainer .alertsRow.error').attr("style", "display: none !important");
                 this.alerts.setMessage('You profile details has been updated! Please wait ..' ,'success');
-
+                
+                /*
                 setTimeout(function(){
                     _that.router.navigate(['/']);
                    }, 2000);
+                */
               }
 
                 
@@ -532,9 +573,7 @@ export class EditprofilecomponentComponent implements OnInit {
         const skills = this.CommonService_.getSkills().toPromise();
         const genders = this.CommonService_.getGenders().toPromise();
         const languages = this.CommonService_.getLanguages().toPromise();
-    
         let res = await Promise.all([locations, skills,genders,languages]);
-        
         this.locations = res[0];
         // this.positions = res[1];
         // this.companies = res[2];
@@ -554,9 +593,11 @@ export class EditprofilecomponentComponent implements OnInit {
 
         // here you can retrieve promises results,
         // in res[0], res[1], res[2] respectively.
+
+        this.getEmployeeProfile(this.loggedInEmployeeID)
     }
 
-    async getEmployeeProfile(employeeID)
+    getEmployeeProfile(employeeID)
     {
         const _that = this;
         this.RegisterService_
@@ -575,42 +616,68 @@ export class EditprofilecomponentComponent implements OnInit {
     assignEmployeeDetails()
     {
         const _that = this;
-
        
-        let dobArray = _that.employeeProfiles['profileData'][0].dob.split('-');
+        if(_that.employeeProfiles['profileData'].length >0 )
+        {
+            let dobArray = _that.employeeProfiles['profileData'][0].dob.split('-');
+            this.EditForm.controls["firstName"].setValue(_that.employeeProfiles['profileData'][0].firstName);
+            this.EditForm.controls["lastName"].setValue(_that.employeeProfiles['profileData'][0].lastName);
+            this.EditForm.controls["birthDateYear"].setValue(dobArray[0]);
+            this.EditForm.controls["birthDateMonth"].setValue(dobArray[1]);
+            this.EditForm.controls["birthDateDate"].setValue(dobArray[2]);
+            this.EditForm.controls["birthDateGender"].setValue(_that.employeeProfiles['profileData'][0].gender);
+            this.EditForm.controls["ddlLocation"].setValue(_that.employeeProfiles['profileData'][0].locationName);
+            this.selectedLocation = _that.employeeProfiles['profileData'][0].locationID;
+            this.EditForm.controls["organization"].setValue(_that.employeeProfiles['profileData'][0].organization);
+            this.EditForm.controls["website"].setValue(_that.employeeProfiles['profileData'][0].website);
+            this.EditForm.controls["language"].setValue(_that.employeeProfiles['profileData'][0].languageID);
+            this.imageSrc = _that.employeeProfiles['profileData'][0].imageProfile;
+            this.EditForm.controls["bio"].setValue(_that.employeeProfiles['profileData'][0].about);
+        }
+
+        if(_that.employeeProfiles['phoneNumbers'].length >0 )
+        {
+            this.EditForm.controls["phoneNumber"].setValue(_that.employeeProfiles['phoneNumbers'][0].phoneNumber);
+            this.EditForm.controls["altphoneNumber"].setValue(_that.employeeProfiles['phoneNumbers'][1].phoneNumber);
+        }
         
-        this.EditForm.controls["firstName"].setValue(_that.employeeProfiles['profileData'][0].firstName);
-        this.EditForm.controls["lastName"].setValue(_that.employeeProfiles['profileData'][0].lastName);
-        this.EditForm.controls["birthDateYear"].setValue(dobArray[0]);
-        this.EditForm.controls["birthDateMonth"].setValue(dobArray[1]);
-        this.EditForm.controls["birthDateDate"].setValue(dobArray[2]);
-        this.EditForm.controls["birthDateGender"].setValue(_that.employeeProfiles['profileData'][0].gender);
-        this.EditForm.controls["ddlLocation"].setValue(_that.employeeProfiles['profileData'][0].locationName);
-        this.selectedLocation = _that.employeeProfiles['profileData'][0].locationID;
-        this.EditForm.controls["organization"].setValue(_that.employeeProfiles['profileData'][0].organization);
-        this.EditForm.controls["website"].setValue(_that.employeeProfiles['profileData'][0].website);
-        this.EditForm.controls["language"].setValue(_that.employeeProfiles['profileData'][0].languageID);
-        this.imageSrc = _that.employeeProfiles['profileData'][0].imageProfile;
-        this.EditForm.controls["bio"].setValue(_that.employeeProfiles['profileData'][0].about);
-        this.EditForm.controls["phoneNumber"].setValue(_that.employeeProfiles['phoneNumbers'][0].phoneNumber);
-         this.EditForm.controls["altphoneNumber"].setValue(_that.employeeProfiles['phoneNumbers'][1].phoneNumber);
-         this.EditForm.controls["fromDate1"].setValue(_that.employeeProfiles['professionalExp'][0].fromDate);
-         this.EditForm.controls["toDate1"].setValue(_that.employeeProfiles['professionalExp'][0].fromDate);
-         this.EditForm.controls["ddlCompany1"].setValue(_that.employeeProfiles['professionalExp'][0].companyName);
-         this.EditForm.controls["ddlPosition1"].setValue(_that.employeeProfiles['professionalExp'][0].positionName);
+         
+         if(_that.employeeProfiles['professionalExp'].length >0 )
+         {
+            this.EditForm.controls["fromDate1"].setValue(_that.employeeProfiles['professionalExp'][0].fromDate);
+            this.EditForm.controls["toDate1"].setValue(_that.employeeProfiles['professionalExp'][0].toDate);
+            this.EditForm.controls["ddlCompany1"].setValue(_that.employeeProfiles['professionalExp'][0].companyName);
+            this.EditForm.controls["ddlPosition1"].setValue(_that.employeeProfiles['professionalExp'][0].positionName);
+            this.EditForm.controls["description1"].setValue(_that.employeeProfiles['professionalExp'][0].description);
+            this.selectedPosition = _that.employeeProfiles['professionalExp'][0].positionName;
+            this.selectedCompany = _that.employeeProfiles['professionalExp'][0].companyName;
+         }
+         
+        
          // document.getElementById('fileList').innerHTML = _that.employeeProfiles['userResumes'][0].resumeName;
        
-        this.EditForm.controls["fileInputSource"].setValue(_that.employeeProfiles['userResumes'][0].resumePath);
-         this.EditForm.controls["InstagramLink"].setValue(_that.employeeProfiles['userSocialLinks'][0].socialProfile);
-         this.EditForm.controls["FacebookLink"].setValue(_that.employeeProfiles['userSocialLinks'][1].socialProfile);
-         this.EditForm.controls["TwitterLink"].setValue(_that.employeeProfiles['userSocialLinks'][2].socialProfile);
-         this.EditForm.controls["YoutubeLink"].setValue(_that.employeeProfiles['userSocialLinks'][3].socialProfile);
-         this.EditForm.controls["GithubLink"].setValue(_that.employeeProfiles['userSocialLinks'][4].socialProfile);
+        
+         if(_that.employeeProfiles['userSocialLinks'].length >0 )
+         {
+            this.EditForm.controls["InstagramLink"].setValue(_that.employeeProfiles['userSocialLinks'][0].socialProfile);
+            this.EditForm.controls["FacebookLink"].setValue(_that.employeeProfiles['userSocialLinks'][1].socialProfile);
+            this.EditForm.controls["TwitterLink"].setValue(_that.employeeProfiles['userSocialLinks'][2].socialProfile);
+            this.EditForm.controls["YoutubeLink"].setValue(_that.employeeProfiles['userSocialLinks'][3].socialProfile);
+            this.EditForm.controls["GithubLink"].setValue(_that.employeeProfiles['userSocialLinks'][4].socialProfile);
+         }
+         
+         if(_that.employeeProfiles['skills'].length >0 )
+         {
+            this.selectedSkillItems = _that.employeeProfiles['skills'];
+         }
 
-         this.selectedPosition = _that.employeeProfiles['professionalExp'][0].positionName;
-         this.selectedCompany = _that.employeeProfiles['professionalExp'][0].companyName;
-         this.selectedSkillItems = _that.employeeProfiles['skills'];
-         $("#fileList").html(_that.employeeProfiles['userResumes'][0].resumeName); 
+         if(_that.employeeProfiles['userResumes'].length >0 )
+         {
+            this.EditForm.controls["fileInputSource"].setValue(_that.employeeProfiles['userResumes'][0].resumePath);
+            $("#fileList").html(_that.employeeProfiles['userResumes'][0].resumeName); 
+         }
+
+         this.spinner.hide();
 
 
     }

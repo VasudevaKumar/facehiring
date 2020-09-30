@@ -93,7 +93,7 @@ export class ChangePasswordComponent implements OnInit {
 
 
           setTimeout(function(){
-            this.router.navigate(['/']);
+            _that.router.navigate(['/']);
            }, 2000);
 
             });

@@ -186,16 +186,26 @@ export class MenucomponentComponent implements OnInit {
     
     });
   }
+  displayMessage(ID , postID, category)
+  {
+    const _that = this;
+
+        $('html,body').animate({
+          // scrollTop: $("#fhPostID" + postID).offset().bottom
+          scrollTop: $("#commentPost_"+postID).offset().top
+      }, 'slow');
+      $("#commentPost_"+postID).show();
+  }
   acceptRequestNotification(ID , postID, category)
   {
     // console.log('com'+ companyID)
     const _that = this;
 
         $('html,body').animate({
-          scrollTop: $("#fhPostID" + postID).offset().top
+          // scrollTop: $("#fhPostID" + postID).offset().bottom
+          scrollTop: $("#commentPost_"+postID).offset().top
       }, 'slow');
-
-      
+      $("#commentPost_"+postID).show();
      this.EmployeeService_
         .acceptRequestNotification(ID , category)
         .subscribe()

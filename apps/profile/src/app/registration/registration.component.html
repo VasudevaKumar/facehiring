@@ -625,6 +625,7 @@
                   
                </div>
             </div>
+            
             <div class="border rounded bg-white mb-3">
                
                <div class="row">
@@ -652,7 +653,7 @@
                            <mat-form-field color="accent" style="width: 95%;">
                               <mat-label>From date </mat-label>
                               
-                              <input matInput [matDatepicker]="picker1" name="fromDate[]" id="fromDate{{i}}" class="inputFormCls">
+                              <input matInput [matDatepicker]="picker1" [readonly]="true" name="fromDate[]" id="fromDate{{i}}" class="inputFormCls">
                               <mat-datepicker-toggle matSuffix [for]="picker1"></mat-datepicker-toggle>
                               <mat-datepicker #picker1></mat-datepicker>
                             </mat-form-field>
@@ -666,7 +667,7 @@
                         <div class="position-relative">
                            <mat-form-field color="accent" style="width: 95%;">
                               <mat-label>To date</mat-label>
-                              <input matInput [matDatepicker]="picker2" name="toDate[]" id="toDate{{i}}">
+                              <input matInput [matDatepicker]="picker2" [readonly]="true" name="toDate[]" id="toDate{{i}}">
                               <mat-datepicker-toggle matSuffix [for]="picker2"></mat-datepicker-toggle>
                               <mat-datepicker #picker2></mat-datepicker>
                             </mat-form-field>
@@ -773,7 +774,7 @@
                            <div class ="fromDateCls" style="margin:0px; padding:0px;">
                            <mat-form-field color="accent" style="width: 95%;">
                               <mat-label>From date <span class="text-danger">*</span></mat-label>
-                              <input matInput [matDatepicker]="picker1" name="fromDate_edu[]" id="fromDate_edu{{i}}" class="inputFormCls">
+                              <input matInput [matDatepicker]="picker1" [readonly]="true" name="fromDate_edu[]" id="fromDate_edu{{i}}" class="inputFormCls">
                               <mat-datepicker-toggle matSuffix [for]="picker1"></mat-datepicker-toggle>
                               <mat-datepicker #picker1></mat-datepicker>
                             </mat-form-field>
@@ -787,7 +788,7 @@
                         <div class="position-relative">
                            <mat-form-field color="accent" style="width: 95%;">
                               <mat-label>To date <span class="text-danger">*</span></mat-label>
-                              <input matInput [matDatepicker]="picker2" name="toDate_edu[]" id="toDate_edu{{i}}">
+                              <input matInput [matDatepicker]="picker2" [readonly]="true" name="toDate_edu[]" id="toDate_edu{{i}}">
                               <mat-datepicker-toggle matSuffix [for]="picker2"></mat-datepicker-toggle>
                               <mat-datepicker #picker2></mat-datepicker>
                             </mat-form-field>
@@ -871,7 +872,7 @@
                <div class="box-title border-bottom p-3">
                   <h6 class="m-0">Upload Resume.</h6>
                   <div *ngIf="ResumeTypeError" class="warning-block mb-0 mt-0 small">
-                     Only allow files (.doc, .docx, .pdf)</div>
+                     Only allow files (.doc, .docx, .pdf) with less than 1MB size.</div>
                         </div>
                <div class="box-body">
                   <div class="p-3 border-bottom">

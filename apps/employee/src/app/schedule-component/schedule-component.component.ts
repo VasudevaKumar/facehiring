@@ -58,15 +58,15 @@ export class ScheduleComponentComponent implements OnInit {
     this.spinner.show();
     this.currentUser = JSON.parse(localStorage.getItem('currentUser'));
     this.loggedInEmployeeID  = this.currentUser[0].user_id;
-    
-    /*this.dataSource = [
+    /*
+    this.dataSource = [
         {
             "RoomId": 10,
             "Id": 1,
             "Subject": "Board Meeting s",
             "Description": "Meeting to discuss business goal of 2020.",
-            "StartTime": "2020-01-05T04:00:00.000Z",
-            "EndTime": "2020-01-05T05:30:00.000Z"
+            "StartTime": "2020-01-05 04:00:00.000",
+            "EndTime": "2020-01-05 05:00:00.000"
         },
         {
             "RoomId": 8,
@@ -140,12 +140,12 @@ export class ScheduleComponentComponent implements OnInit {
             "StartTime": "2020-01-11T07:30:00.000Z",
             "EndTime": "2020-01-11T09:00:00.000Z"
         }
+        
     ]
     */
 
-
-    this.loadSchedules();
-
+    this.getCompanyInterviewSchedules(this.loggedInEmployeeID);
+   //  this.loadSchedules();
   }
 
   public getCompanyInterviewSchedules(employeeID)
@@ -163,13 +163,16 @@ export class ScheduleComponentComponent implements OnInit {
 
   loadSchedules()
   {
+
+    console.log(this.dataSource);
+    
     let data: Object[] = <Object[]>extend([], (this.dataSource as any), null, true);
     let scheduleObj: Schedule = new Schedule({
         width: '100%',
         height: '575px',
         selectedDate: new Date(2020, 1, 11),
         eventSettings: { dataSource: data },
-        eventRendered: (args: EventRenderedArgs) => {
+        /*eventRendered: (args: EventRenderedArgs) => {
             let categoryColor: string = args.data.CategoryColor as string;
             if (!args.element || !categoryColor) {
                 return;
@@ -179,11 +182,56 @@ export class ScheduleComponentComponent implements OnInit {
             } else {
                 args.element.style.backgroundColor = categoryColor;
             }
-        },
+        },*/
     });
     scheduleObj.appendTo('#Schedule');
 
     this.spinner.hide();
   }
 
+}
+
+
+$('#ScheduleEditForm').submit(function() {
+  // get all the inputs into an array.
+  var $inputs = $('#ScheduleEditForm :input');
+
+  // not sure if you wanted this, but I thought I'd add it.
+  // get an associative array of just the values.
+  var values = {};
+  $inputs.each(function() {
+      values[this.name] = $(this).val();
+  });
+
+});
+
+$(".e-footer-content").click(function(){
+  alert('here');
+});
+
+$(document).on("click", "#Schedule_dialog_wrapper .e-event-save", function(event){
+  alert('g');
+ 
+  var vals = getAllValues();
+  //console.log(vals);
+});
+
+function getAllValues() {
+  var inputValues = $('#ScheduleEditForm :input').map(function() {
+      var type = $(this).prop("type");
+
+      // checked radios/checkboxes
+      if ((type == "checkbox" || type == "radio") && this.checked) { 
+         // return $(this).val();
+         console.log('xxxx');
+         console.log($(this).val());
+      }
+      // all other fields, except buttons
+      else if (type != "button" && type != "submit") {
+         //  return $(this).val();
+         console.log('yyyy');
+         console.log($(this).val());
+      }
+  })
+  // return inputValues.join(',');
 }

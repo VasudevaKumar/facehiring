@@ -42,7 +42,10 @@
                          <button type="button" class="btn btn-outline-secondary btn-sm mr-1">Business Analyst</button>
                       </div>  -->
                       <div class="p-3 border-top">
-                         <div class="row">
+                        <div class="row" *ngIf="filterJobs.length == 0">
+                              <p>Job listings will be coming soon.</p>
+                        </div> 
+                        <div class="row" *ngIf="filterJobs.length >0">
                            <div class="col-md-6" *ngFor="let activeJobPosting of filterJobs">
                               <a href="" (click)="jobDetailPage(activeJobPosting.id); false;">
                                
@@ -63,6 +66,7 @@
                              </a> 
                            </div>
                          </div>
+
                       </div>
                    </div>
                    <!--

@@ -344,4 +344,23 @@ export class EmployeeService {
         ).pipe(map((data: any) => data.data));
   }
 
+  profileViews(employeeID:any)
+  {     
+    const api = this.env.apiBaseURL+'/profileViews';
+    return this.http.post(
+        api,
+        {employeeID:employeeID},
+        ).pipe(map((data: any) => data.data));
+  }
+
+  postLikes(postID:any)
+  {     
+    const api = this.env.apiBaseURL+'/displayLikes';
+    return this.http.post(
+        api,
+        {postID:postID},
+        ).pipe(map((data: any) => data.data));
+  }
+
+
 }

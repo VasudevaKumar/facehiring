@@ -1,0 +1,107 @@
+/* You can add global styles to this file, and also import other style files */
+/* You can add global styles to this file, and also import other style files */
+.alertsContainer .alertsRow.success .iconpanel{
+    height:80px !important
+}
+.alertsContainer .alertsRow.success .messagepanel{
+    height:80px !important
+}
+.alertsContainer .alertsRow.error .iconpanel{
+    height:60px !important
+}
+.alertsContainer .alertsRow.error .messagepanel{
+    height:60px !important
+}
+.alertsContainer .alertsRow.warn .iconpanel{
+    height:60px !important
+}
+.alertsContainer .alertsRow.warn .messagepanel{
+    height:60px !important
+}
+.cursorHand{
+    cursor: hand !important;
+}
+.nogutter{
+    margin: 0px !important;
+    padding: 0px !important;
+}
+.warning-block{
+    width: 100%;
+    margin-top: .25rem;
+    font-size: 80%;
+    color: #dc3545;
+    text-align:center;
+
+}
+/* You can add global styles to this file, and also import other style files */
+.alertsContainer .alertsRow.success .iconpanel{
+  height:80px !important
+}
+.alertsContainer .alertsRow.success .messagepanel{
+  height:80px !important
+}
+.alertsContainer .alertsRow.error .iconpanel{
+  height:60px !important
+}
+.alertsContainer .alertsRow.error .messagepanel{
+  height:60px !important
+}
+.alertsContainer .alertsRow.warn .iconpanel{
+  height:60px !important
+}
+.alertsContainer .alertsRow.warn .messagepanel{
+  height:60px !important
+}
+.cursorHand{
+  cursor: hand !important;
+}
+.nogutter{
+  margin: 0px !important;
+  padding: 0px !important;
+}
+.warning-block{
+  width: 100%;
+  margin-top: .25rem;
+  font-size: 80%;
+  color: #dc3545;
+  text-align:center;
+
+}
+.registration-login-form{
+  min-height:120px !important;
+}
+.landing-content{
+  min-height:120px !important;
+}
+.btn-md{
+  font-size: 0.85rem;
+}
+.forgotClass a {
+  color: #007bff;
+  text-decoration: none;
+  background-color: transparent;
+}
+.forgotClass{
+  float: right; margin-right: 15px;
+}
+#signUpContainer{
+  margin-top:150px;
+}
+.toprightCorner{
+  padding-top:0px;
+}
+#loginDialog{
+  display:none;
+}
+.wellcomeBigText{
+  padding:0px; margin:0px; color:white; font-weight: bold;
+}
+.wellcomSmallText{
+  padding:0px; margin:0px; color:white; font-weight: normal;
+}
+.mb-10{
+  margin-bottom:10px;
+}
+.pl-3{
+  padding-left:3px !important;
+}

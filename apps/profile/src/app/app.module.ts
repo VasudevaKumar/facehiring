@@ -32,6 +32,8 @@ import { JobSearchComponent } from './job-search/job-search.component';
 import { JobdetailComponent } from './jobdetail/jobdetail.component';
 import { MyjobsComponent } from './myjobs/myjobs.component';
 import { ConfirmationDialogComponentComponent } from './confirmation-dialog-component/confirmation-dialog-component.component';
+import { ModalModule } from 'ngx-bootstrap/modal';  
+
 
 const appRoutes:Routes = [
   {
@@ -127,6 +129,8 @@ export class replaceImg40Pipe implements PipeTransform {
     AlertsModule.forRoot(),
     RouterModule.forRoot(appRoutes),
     FontAwesomeModule,
+    ModalModule.forRoot()
+
   ],
   providers: [],
   bootstrap: [AppComponent],

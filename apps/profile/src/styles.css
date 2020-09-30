@@ -119,8 +119,14 @@
   margin-top:-2px;
 }
 
+.mt--15{
+  margin-top:-15px;
+}
 .isDisabled {
   cursor: not-allowed;
   /*opacity: 0.5;*/
   text-decoration: none;
+}
+.h-40{
+  height: 40px;
 }

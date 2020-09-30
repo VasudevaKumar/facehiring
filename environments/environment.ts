@@ -7,6 +7,7 @@ export const environment = {
   environmentName: 'LOCAL',
   hostBaseURL: 'http://localhost',
   apiBaseURL: 'http://localhost/fhapi'
+
 };
 
 /*

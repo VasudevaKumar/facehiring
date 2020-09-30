@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, TemplateRef  } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { EmployeeService } from '../_services/employee.service';
@@ -6,6 +6,7 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { ImageCroppedEvent } from 'ngx-image-cropper';
 import { NgxSpinnerService } from "ngx-spinner";
 import { AngularEditorConfig } from '@kolkov/angular-editor';
+import { BsModalService, BsModalRef } from 'ngx-bootstrap/modal'; 
 
 declare var jQuery: any;
 declare var $: any;
@@ -17,6 +18,8 @@ declare var $: any;
   styleUrls: ['./homecomponent.component.css']
 })
 export class HomecomponentComponent implements OnInit {
+
+  modalRef: BsModalRef;  
   
   imageChangedEvent: any = '';
   imageChangedEventR:any = '';
@@ -33,6 +36,9 @@ export class HomecomponentComponent implements OnInit {
   employeeHomePagePics=[];
   postComments=[];
   totalConnects = [];
+  profileViewDetails = [];
+  postLikeDetails = [];
+
   isEmployeeProfileLoaded = false;
   ImageSizeerror:boolean = false;
   ImageTypeeerror:boolean = false;
@@ -46,7 +52,8 @@ export class HomecomponentComponent implements OnInit {
   imageSrcLeft: string;
   imageSrcRight: string;
   isContentLoaded = false;
-
+  viewDetails = '';
+  
   config: AngularEditorConfig = {
     editable: true,
     spellcheck: true,
@@ -79,7 +86,8 @@ export class HomecomponentComponent implements OnInit {
     private router: Router,
     private EmployeeService_:EmployeeService,
     private formBuilder: FormBuilder,
-    private spinner: NgxSpinnerService
+    private spinner: NgxSpinnerService,
+    private modalService: BsModalService
     
 ) {
     // redirect to home if already logged in
@@ -118,7 +126,7 @@ export class HomecomponentComponent implements OnInit {
       .subscribe(employeeProfiles => (_that.employeeProfiles = employeeProfiles))
       .add(() => {
         /*console.log(_that.employeeProfiles['profileData'][0].firstName);*/
-       console.log(_that.employeeProfiles);
+       // console.log(_that.employeeProfiles);
        _that.isEmployeeProfileLoaded = true;
       });
 
@@ -155,8 +163,9 @@ export class HomecomponentComponent implements OnInit {
           const width = img.naturalWidth;
           const height = img.naturalHeight;
           window.URL.revokeObjectURL( img.src );
-          console.log(width + '*' + height);
-              console.log(event.target);
+          // console.log(width + '*' + height);
+           // console.log(event.target);
+
               this.ImageSizeerror = false;
               var canvas=document.createElement("canvas");
               var context=canvas.getContext("2d");
@@ -212,7 +221,7 @@ export class HomecomponentComponent implements OnInit {
 
     submitForm(type)
     {
-     
+      this.spinner.show();
       //  this.openwaitdialog('<img src="assets/img/loading.gif">',200);
       if(type == 'left')
       {
@@ -225,6 +234,9 @@ export class HomecomponentComponent implements OnInit {
               .uploadHomePageFileL(formData)
               .subscribe((resp) => {
                 //console.log(resp);
+              })
+              .add(() => {
+                this.spinner.hide();
               });
       }
       if(type == 'right')
@@ -238,6 +250,9 @@ export class HomecomponentComponent implements OnInit {
               .uploadHomePageFileR(formData)
               .subscribe((resp) => {
                 //console.log(resp);
+              })
+              .add(() => {
+                this.spinner.hide();
               });
       }
 
@@ -376,7 +391,7 @@ export class HomecomponentComponent implements OnInit {
     .subscribe(postComments => (_that.postComments = postComments))
     .add(() => {
       /*console.log(_that.employeeProfiles['profileData'][0].firstName);*/
-      console.log(_that.postComments);
+      // console.log(_that.postComments);
       this.closewaitdialog();
     });
 
@@ -424,10 +439,8 @@ export class HomecomponentComponent implements OnInit {
     console.log(_that.postComments);
      _that.postComments.find(v => v.id === postID).isLiked = 'Y';
 */
-    console.log(_that.postComments);
+    
      this.changeLik(postID , 'Y');
-     console.log(_that.postComments);
-
     }
 
     changeLik( postID, st ) {
@@ -582,7 +595,11 @@ cropperReadyR() {
     });
 
     }
-
+    closeModel(userID)
+    {
+      this.modalRef.hide();
+      this.showProfile(userID);
+    }
     showProfile(userID)
     {
       // this.router.navigate(['/profile/myProfile']);
@@ -594,5 +611,58 @@ cropperReadyR() {
     {
       return false;
     }
-  
+
+    fn_profilView(template: TemplateRef<any>) {  
+      
+      this.spinner.show();
+        
+        const _that = this;
+        this.EmployeeService_.profileViews(this.loggedInEmployeeID)
+        .subscribe(profileViewDetails => (_that.profileViewDetails = profileViewDetails))
+      .add(() => {
+        
+//         console.log(_that.profileViewDetails);
+          this.spinner.hide();
+          _that.modalRef = this.modalService.show(  
+            template,  
+            Object.assign({}, { class: 'gray modal-lg' })  
+            );  
+                    
+                });
+              
+      /*
+       this.modalRef = this.modalService.show(  
+         template,  
+          Object.assign({}, { class: 'gray modal-lg' })  
+          );  
+        
+        */
+      } 
+
+      fn_likesView(template: TemplateRef<any>, postID:any) {  
+        
+        this.spinner.show();
+        const _that = this;
+        this.EmployeeService_.postLikes(postID)
+        .subscribe(postLikeDetails => (_that.postLikeDetails = postLikeDetails))
+      .add(() => {
+        this.spinner.hide();
+//         console.log(_that.profileViewDetails);
+          _that.modalRef = this.modalService.show(  
+            template,  
+            Object.assign({}, { class: 'gray modal-lg' })  
+            );  
+                    
+                });
+
+      /*
+       this.modalRef = this.modalService.show(  
+         template,  
+          Object.assign({}, { class: 'gray modal-lg' })  
+          );  
+        
+        */
+      } 
+
+      
 }

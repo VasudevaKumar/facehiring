@@ -71,6 +71,10 @@ export class RegistrationComponent implements OnInit {
 
     public countExp = 1;
     public countEdu = 1;
+    
+    public loggedInEmployeeID:any;
+    public currentUser:any;
+
     constructor(
         private formBuilder: FormBuilder,
         private router: Router,
@@ -95,6 +99,7 @@ export class RegistrationComponent implements OnInit {
         // this.getPositions();
         // this.getCompanies();
         // this.getskills();
+        this.spinner.show();
         this.myFunction();
         this.selectedSkillItems = [];
 
@@ -444,7 +449,7 @@ export class RegistrationComponent implements OnInit {
     if($("#ddlClass_edu"+index).val() == '')
     {
         isValid = false;
-        $("#errorMsg_edu"+index).html('Class name is required');
+        $("#errorMsg_edu"+index).html('Education should not be blank');
         $("#errorMsg_edu"+index).show();
         return;
     }
@@ -497,9 +502,10 @@ return (<FormArray> this.registerForm.get('edus')).controls
             const width = img.naturalWidth;
             const height = img.naturalHeight;
             window.URL.revokeObjectURL( img.src );
-            console.log(width + '*' + height);
 
-                console.log(event.target);
+            // console.log(width + '*' + height);
+
+                // console.log(event.target);
                 this.ImageSizeerror = false;
 
                 var canvas=document.createElement("canvas");
@@ -555,20 +561,31 @@ return (<FormArray> this.registerForm.get('edus')).controls
 
       fileEvent(event){
         this.ResumeTypeError = false;  
-        let resumeValue = $("#file-upload").val();
-            var ext = resumeValue.split('.').pop();
-            if(ext=="pdf" || ext=="docx" || ext=="doc"){
-                let files = event.target.files[0].name;
-                document.getElementById('fileList').innerHTML = files;
-                // this.registerForm.controls['fileInput'].setValue(files ? files.name : '');
-                const fileInput = event.target.files[0];
-                    this.registerForm.patchValue({
-                        fileInputSource: fileInput
-                    });
-            } else{
-                    console.log('error');
-                    this.ResumeTypeError = true;
-                    document.getElementById('fileList').innerHTML = '';
+
+        var iSize = event.target.files[0].size / 1024; 
+        iSize = (Math.round(iSize * 100) / 100)
+        // $("#size").html( iSize  + "kb"); 
+        if(iSize<=1024)
+        {
+            let resumeValue = $("#file-upload").val();
+                var ext = resumeValue.split('.').pop();
+                if(ext=="pdf" || ext=="docx" || ext=="doc"){
+                    let files = event.target.files[0].name;
+                    document.getElementById('fileList').innerHTML = files;
+                    // this.registerForm.controls['fileInput'].setValue(files ? files.name : '');
+                    const fileInput = event.target.files[0];
+                        this.registerForm.patchValue({
+                            fileInputSource: fileInput
+                        });
+                } else{
+                        // console.log('error');
+                        this.ResumeTypeError = true;
+                        document.getElementById('fileList').innerHTML = '';
+                }
+            } // size less than 1024
+            else{
+                this.ResumeTypeError = true;
+                document.getElementById('fileList').innerHTML = '';
             }
     }
     removeFileLink()
@@ -611,7 +628,7 @@ return (<FormArray> this.registerForm.get('edus')).controls
             /** Exp validation */
             $("input[name='fromDate[]']").each(function(index, value) {
                 
-                console.log('first name required');
+                // console.log('first name required');
 
                 $("#fromDateErrorMsg"+index).hide();
                 $("#fromDateErrorMsg"+index).html('');
@@ -679,14 +696,14 @@ return (<FormArray> this.registerForm.get('edus')).controls
              
             $("input[name='ddlCompany[]']").each(function(index, value) {
                 
-                console.log('index'+index);
+                // console.log('index'+index);
 
                 $("#companyErrorMsg"+index).hide();
                 $("#companyErrorMsg"+index).html('');
 
                 if ($(this).val() == "") {
                     
-                    console.log('error');
+                    // console.log('error');
 
                     $("#companyErrorMsg"+index).show();
                     $("#companyErrorMsg"+index).html('Company name should not be blank');
@@ -704,14 +721,14 @@ return (<FormArray> this.registerForm.get('edus')).controls
 
             $("input[name='ddlPositions[]']").each(function(index, value) {
                 
-                console.log('index12'+index);
+                // console.log('index12'+index);
 
                 $("#poitionErrorMsg"+index).hide();
                 $("#poitionErrorMsg"+index).html('');
 
                 if ($(this).val() == "") {
 
-                    console.log('error1');
+                    // console.log('error1');
 
 
                     $("#poitionErrorMsg"+index).show();
@@ -799,14 +816,14 @@ return (<FormArray> this.registerForm.get('edus')).controls
              
             $("input[name='ddlClass_edu[]']").each(function(index, value) {
                 
-                console.log('index'+index);
+                // console.log('index'+index);
 
                 $("#classErrorMsg_edu"+index).hide();
                 $("#classErrorMsg_edu"+index).html('');
 
                 if($(this).val() == "") {
                     
-                    console.log('error');
+                    // console.log('error');
 
                     $("#classErrorMsg_edu"+index).show();
                     $("#classErrorMsg_edu"+index).html('Education should not be blank');
@@ -830,7 +847,7 @@ return (<FormArray> this.registerForm.get('edus')).controls
 
                 if($(this).val() == "") {
 
-                    console.log('error1');
+                    // console.log('error1');
 
 
                     $("#collegeErrorMsg_edu"+index).show();
@@ -851,14 +868,14 @@ return (<FormArray> this.registerForm.get('edus')).controls
             /** End Edu validation */
 
             if (this.registerForm.invalid) {
-                console.log('invalid');
+                // console.log('invalid');
                 window.scrollTo({ top: 0, behavior: 'smooth' });
                 this.findInvalidControls();
                 return;
             }
             if(!expEduValidate)
             {
-                console.log('here');
+                // console.log('here');
                return;
               }
               // this.spinner.show();
@@ -998,7 +1015,7 @@ return (<FormArray> this.registerForm.get('edus')).controls
     }
     showFlashMsg(respMsg , type)
     {
-        console.log(respMsg);
+        // console.log(respMsg);
     }
 
     /* Auto completes */
@@ -1121,6 +1138,7 @@ return (<FormArray> this.registerForm.get('edus')).controls
 
         // here you can retrieve promises results,
         // in res[0], res[1], res[2] respectively.
+        this.spinner.hide();
     }
 
     openwaitdialog(loadingMessage: any = 'Loading', defaultWidth: any = 350) {
@@ -1172,7 +1190,7 @@ return (<FormArray> this.registerForm.get('edus')).controls
                 invalid.push(name);
             }
         }
-        console.log(invalid);
+        // console.log(invalid);
     }
 
     verifyEmailAvailability(emailAddress)
@@ -1181,7 +1199,7 @@ return (<FormArray> this.registerForm.get('edus')).controls
         this.RegisterService_
             .verifyEmailAvailability(emailAddress)
             .subscribe((resp) => {
-                console.log(resp.length);
+                // console.log(resp.length);
             if(resp.length>0)
             {
                 $("#emailAddress").val('');

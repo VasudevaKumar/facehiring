@@ -53,21 +53,21 @@ export class ProfilecomponentComponent implements OnInit {
     {
       const _that = this;
       const res1 = this.EmployeeService_.getMyProfileBasicInfo(employeeID).toPromise();
-      const res2 = this.EmployeeService_.gettotalConnects(employeeID).toPromise();
+      // const res2 = this.EmployeeService_.gettotalConnects(employeeID).toPromise();
       const res3 = this.EmployeeService_.getMyProfileSkillInfo(employeeID).toPromise();
       const res4 = this.EmployeeService_.getMyProfileExp(employeeID).toPromise();
       const res5 = this.EmployeeService_.geViewedCompanyProfiles(employeeID).toPromise();
       const res6 = this.EmployeeService_.getMyProfileEducation(employeeID).toPromise();
       
 
-      let res = await Promise.all([res1 , res2, res3, res4, res5, res6]);
+      let res = await Promise.all([res1 , res3, res4, res5, res6]);
       //let res = await Promise.all([res1, res4]);
       _that.myProfileBasicInfo = res[0];
-      _that.totalConnects = res[1];
-      _that.skillInfo = res[2];
-      _that.expInfo = res[3];
-      _that.companyProfiles = res[4];
-      _that.eduInfo = res[5];
+      // _that.totalConnects = res[1];
+      _that.skillInfo = res[1];
+      _that.expInfo = res[2];
+      _that.companyProfiles = res[3];
+      _that.eduInfo = res[4];
 
       this.isContentLoaded = true;
       // console.log(this.myProfileBasicInfo);

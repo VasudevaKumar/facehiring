@@ -98,7 +98,7 @@
                <!-- Approved request -->
 
                <div class="input-group" *ngFor="let aitem of approvedRequets; index as i;">
-                  <div class="input-group" *ngIf="aitem.isViewed == '0'">
+                  <div class="input-group readMsg" *ngIf="aitem.isViewed == '0'">
                      <a class="dropdown-item d-flex align-items-center" href=""  (click)="acceptApproveRequest(aitem.connectID); false;">
                         <div class="dropdown-list-image mr-3">
                            <img class="rounded-circle" src="{{aitem.imageProfile | replaceImg40}}" alt="" onerror="this.src='assets/files/profilePics/blank.png';">
@@ -111,8 +111,8 @@
                      </a>
                </div>
 
-               <div class="input-group readMsg" *ngIf="aitem.isViewed == '1'">
-                  <a class="dropdown-item d-flex align-items-center" href="#" (click)="preventDefault(); false;">
+               <div class="input-group" *ngIf="aitem.isViewed == '1'">
+                  <a class="dropdown-item d-flex align-items-center isDisabled" href="#" (click)="preventDefault(); false;">
                   <div class="dropdown-list-image mr-3">
                      <img class="rounded-circle" src="{{aitem.imageProfile | replaceImg40}}" alt="" onerror="this.src='assets/files/profilePics/blank.png';">
                      <div class="status-indicator bg-success"></div>
@@ -130,7 +130,7 @@
             <!-- Post comments request -->
             <div class="input-group" *ngFor="let nItem of notificationComments; index as i;" >
                
-            <div class="input-group" *ngIf="nItem.isViewed == '0'">
+            <div class="input-group readMsg" *ngIf="nItem.isViewed == '0'">
                <a class="dropdown-item d-flex align-items-center" href="#"  (click)="acceptRequestNotification(nItem.id , nItem.postID , nItem.category); false;">
                   <div class="dropdown-list-image mr-3">
                      <img class="rounded-circle" src="{{nItem.imageProfile | replaceImg40}}" alt="" onerror="this.src='assets/files/profilePics/blank.png';">
@@ -145,8 +145,8 @@
                </a>
             </div>
 
-            <div class="input-group readMsg" *ngIf="nItem.isViewed == '1'">
-               <a class="dropdown-item d-flex align-items-center" href="#" (click)="preventDefault(); false;"> 
+            <div class="input-group" *ngIf="nItem.isViewed == '1'">
+               <a class="dropdown-item d-flex align-items-center" href="#" (click)="displayMessage(nItem.id , nItem.postID , nItem.category); false;"> 
                <div class="dropdown-list-image mr-3">
                   <img class="rounded-circle" src="{{nItem.imageProfile | replaceImg40}}" alt="" onerror="this.src='assets/files/profilePics/blank.png';">
                   <div class="status-indicator bg-success"></div>

@@ -129,7 +129,7 @@ Version: 1.0
      font-weight: 500 !important;
      word-break: break-all;
      overflow: hidden;
-     white-space: nowrap;
+     /*white-space: nowrap;*/ /* Change made on 17.9 */
 }
  .people-list .btn-sm {
      font-size: .800rem;
@@ -335,7 +335,7 @@ Version: 1.0
 }
  .dropdown-list-image .status-indicator {
      background-color: #eaecf4;
-     height: .75rem;
+   /*  height: .75rem; */
    /*  width: .75rem;*/ /* Need to implement in Phase 2 -- Login Status Green indicator -- Uncomment width it will work*/
      border-radius: 100%;
      position: absolute;

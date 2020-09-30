@@ -109,7 +109,7 @@ export class LoginComponent implements OnInit {
                           window.scrollTo({ top: 0, behavior: 'smooth' });
                           this.alerts.setDefaults('timeout',500);
                           this.alerts.setMessage(data.data.returnMessage ,'success');
-                          
+                          /*
                           if(this.currentUser.length > 0)
                           {
                             if(this.currentUser[0]['role_id'] == 2)
@@ -125,7 +125,7 @@ export class LoginComponent implements OnInit {
                               }, 3000);
                             }
                           }
-                         
+                         */
                          }
                         
                      },

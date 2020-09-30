@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit , AfterViewChecked } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { EmployeeService } from '../_services/employee.service';
@@ -37,7 +37,7 @@ export class ConnectioncomponentComponent implements OnInit {
   hashtagMsg = '';
   hashtagValue = '';
   searchString = '';
-
+  isContentLoaded = false;
   public isHashTagAvailable = true;
 
   submitted = false;
@@ -89,7 +89,7 @@ export class ConnectioncomponentComponent implements OnInit {
     this.submitted = true;
 
     if (this.GroupsForm.invalid) {
-      console.log('invalid');
+      // console.log('invalid');
      return;
   }
 
@@ -102,14 +102,14 @@ export class ConnectioncomponentComponent implements OnInit {
             .addGroup(formData)
             .subscribe((data) => {
 
-                 console.log(data);
-                 console.log(data.data);
-                 console.log(data.data.msg);
+                // console.log(data);
+                // console.log(data.data);
+                // console.log(data.data.msg);
 
 
                  if(data.data.msg == 'fail')
                  {
-                   console.log('my google');
+                //   console.log('my google');
                     $("#groupExisted").show();
                  }
                  else {
@@ -128,7 +128,7 @@ export class ConnectioncomponentComponent implements OnInit {
    
     this.submitted = true;
     if (this.HashTagForm.invalid) {
-      console.log('invalid');
+      // console.log('invalid');
      return;
   }
 
@@ -163,9 +163,9 @@ export class ConnectioncomponentComponent implements OnInit {
       _that.filterAllGroups = _that.allGroups;
       _that.filterMyconnects =_that.myconnects;
 
-      console.log( _that.filterConnectPeople);
-
-      this.spinner.hide();
+      // console.log( _that.filterConnectPeople);
+      this.isContentLoaded = true;
+     // this.spinner.hide();
 
     }
 
@@ -250,8 +250,8 @@ export class ConnectioncomponentComponent implements OnInit {
        this.EmployeeService_
      .verifyHashTag(hasTagValue)
      .subscribe((resp) => {
-      console.log(resp); 
-      console.log(resp.data);
+     // console.log(resp); 
+     // console.log(resp.data);
 
       if(resp.data.length > 0)
       {
@@ -304,5 +304,12 @@ export class ConnectioncomponentComponent implements OnInit {
       // this.router.navigate(['/profile/myProfile']);
       localStorage.setItem('searchUser', userID);
       this.router.navigate(['/myProfile']);
+    }
+    ngAfterViewChecked(){
+      if(this.isContentLoaded)
+      {
+         this.spinner.hide();
+      }
+
     }
 }

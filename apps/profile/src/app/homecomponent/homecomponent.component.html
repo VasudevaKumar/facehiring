@@ -80,7 +80,7 @@
                       <div class="status-indicator bg-success"></div>
                    </div>
                    <div class="font-weight-bold">
-                      <div class="text-truncate">{{item.value['posts'].firstName}} {{item.value['posts'].lastName}}</div>
+                      <div class="text-truncate"><a href="" (click)="showProfile(item.value['posts'].user_id); false;">{{item.value['posts'].firstName}} {{item.value['posts'].lastName}}</a></div>
                       <div class="small text-gray-500">{{item.value['posts'].positionName}} at {{item.value['posts'].companyName}}</div>
                    </div>
                    <span class="ml-auto small">{{item.value['posts'].created_at}}</span>
@@ -90,16 +90,20 @@
                 <div class="p-3 border-bottom osahan-post-body" *ngIf="item.value['posts'].type == 'image'">
                   <img src="{{item.value['posts'].post}}" onerror="this.src='assets/files/profilePics/blank.png';" class="img-fluid">
                 </div>
-
+                
                 <div class="p-3 border-bottom osahan-post-footer">
-                   <a href="" class="mr-3 text-secondary" *ngIf="item.value['posts'].isLiked == 'N' && item.value['posts'].user_id != loggedInEmployeeID" (click)="postLike(item.value['posts'].id , item.value['posts'].cnt_likes); false;"><i class="feather-heart text-danger"></i><span id="likeDiv_{{item.value['posts'].id}}">{{item.value['posts'].cnt_likes}}</span></a>
-                   <a href="" class="mr-3 text-secondary isDisabled " *ngIf="item.value['posts'].isLiked == 'Y'"><img src="assets/images/redcolorHeart.jpg" class="img-fluid mt--2" (click)="preventDefault();false;"><span id="likeDiv_{{item.value['posts'].id}}">{{item.value['posts'].cnt_likes}}</span></a>
-                   <a href="" class="mr-3 text-secondary isDisabled" *ngIf="item.value['posts'].isLiked == 'N' && item.value['posts'].user_id == loggedInEmployeeID"><img src="assets/images/redcolorHeart.jpg" class="img-fluid mt--2" (click)="preventDefault();false;"><span id="likeDiv_{{item.value['posts'].id}}">{{item.value['posts'].cnt_likes}}</span></a>
+                   <a href="" class="mr-3 text-secondary" *ngIf="item.value['posts'].isLiked == 'N' && item.value['posts'].user_id != loggedInEmployeeID" (click)="postLike(item.value['posts'].id , item.value['posts'].cnt_likes); false;"><i class="feather-heart text-danger"></i></a>
+                   <a href="" class="mr-3 text-secondary isDisabled " *ngIf="item.value['posts'].isLiked == 'Y'"><img src="assets/images/redcolorHeart.jpg" class="img-fluid mt--2" (click)="preventDefault();false;"></a>
+                   <a href="" class="mr-3 text-secondary isDisabled" *ngIf="item.value['posts'].isLiked == 'N' && item.value['posts'].user_id == loggedInEmployeeID"><img src="assets/images/redcolorHeart.jpg" class="img-fluid mt--2" (click)="preventDefault();false;"></a>
 
                    <a href="" class="mr-3 text-secondary" (click)="displayMessage(item.value['posts'].id); false;"><i class="feather-message-square"></i><span id="commentDiv_{{item.value['posts'].id}}">{{item.value['posts'].cnt_comments}}</span></a>
                    <a href="" class="mr-3 text-secondary" title="Share to your time line" *ngIf="item.value['posts'].user_id != loggedInEmployeeID" (click)="postSharing(item.value['posts'].id , item.value['posts'].cnt_shares); false;"><i class="feather-share-2"></i><span id="shareDiv_{{item.value['posts'].id}}">{{item.value['posts'].cnt_shares}}</span></a>
                    <a href="" class="mr-3 text-secondary" (click)="deletePost(item.value['posts'].id); false;" *ngIf="item.value['posts'].user_id == loggedInEmployeeID"><i class="feather-trash"></i></a>
 
+                   
+                </div>
+                <div class="p-3 border-bottom osahan-post-footer">
+                  <a href="" class="mr-3 text-secondary" title="View likes" (click)="fn_likesView(likestemplate, item.value['posts'].id); false;" *ngIf="item.value['posts'].cnt_likes > 0"><img src="assets/images/viewlike.jpg" class="img-fluid mt--2" (click)="preventDefault();false;"><span id="likeDiv_{{item.value['posts'].id}}">{{item.value['posts'].cnt_likes}}</span></a>
                 </div>
                 <div class="row" style="display: none;" id="commentPost_{{item.value['posts'].id}}">
                 <div class="p-3 d-flex align-items-top border-bottom osahan-post-comment" *ngFor="let cmt of item.value['posts'].comments">
@@ -107,8 +111,8 @@
                       <img class="rounded-circle" src="{{cmt.imageProfile | replaceImg40}}" onerror="this.src='assets/files/profilePics/blank.png';" alt="">
                       <div class="status-indicator bg-success"></div>
                    </div>
-                   <div class="font-weight-bold">
-                      <div class="text-truncate"> {{cmt.firstName}} {{cmt.lastName}} <span class="float-right small">{{cmt.created_at}}</span></div>
+                   <div class="">
+                      <div class="text-truncate"> <a href="" (click)="showProfile(cmt.user_id); false;">{{cmt.firstName}} {{cmt.lastName}}</a> <span class="float-right small">{{cmt.created_at}}</span></div>
                       <div class="" style="width: 473px !important;">{{cmt.comments}}</div>
                    </div>
                 </div>
@@ -136,7 +140,7 @@
                    </div>
                    <div class="col-6 p-3">
                       <h6 class="font-weight-bold text-dark mb-1">{{totalConnects[0].totalViews}}</h6>
-                      <p class="mb-0 text-black-50 small">Views</p>
+                      <p class="mb-0 text-black-50 small"><a href="" (click)="fn_profilView(viewstemplate); false;">Views</a></p>
                    </div>
                 </div>
                 <div class="overflow-hidden border-top">
@@ -222,3 +226,87 @@
 </div>
 
  </div>
+
+ <ng-template #viewstemplate>  
+      <div class="modal-header">  
+        <h4 class="modal-title pull-left">Who viewed your profile</h4>  
+   
+       <button type="button" class="close pull-right" aria-label="Close" (click)="modalRef.hide()">  
+   
+         <span aria-hidden="true">×</span>  
+   
+       </button>  
+   
+     </div>  
+   
+     <div class="modal-body">  
+       
+      <div class="row" *ngIf ="profileViewDetails.length == 0"> No one viewed your profile</div>
+
+
+       <div class="row" *ngIf ="profileViewDetails.length > 0">
+       <div class="input-group h-40" *ngFor="let pitem of profileViewDetails">
+            <div class="dropdown-list-image mr-3 mt--15">
+               <img src="{{pitem.imageProfile | replaceImg40}}" onerror="this.src='assets/files/profilePics/blank.png';" class="img-fluid mt-2 rounded-circle" alt="Responsive image">
+               <div class="status-indicator bg-success"></div>
+            </div>
+            <div class="overflow-hidden backgroundGrey">
+               <div class="text-truncate"><a href="" (click)="closeModel(pitem.user_id); false;">{{pitem.firstName}} {{pitem.lastName}}</a> viewed your profile at {{pitem.viewed_date}}</div>
+            </div>
+         </div>
+         <hr>
+      </div>
+      
+
+   
+   
+     </div>  
+   
+     <div class="modal-footer">  
+   
+       <button type="button" class="btn btn-default" (click)="modalRef.hide()">Close</button>  
+   
+     </div>  
+   
+   </ng-template> 
+
+   <ng-template #likestemplate>  
+      <div class="modal-header">  
+        <h4 class="modal-title pull-left">Who liked your post</h4>  
+   
+       <button type="button" class="close pull-right" aria-label="Close" (click)="modalRef.hide()">  
+   
+         <span aria-hidden="true">×</span>  
+   
+       </button>  
+   
+     </div>  
+   
+     <div class="modal-body">  
+      <div class="row" *ngIf ="postLikeDetails.length == 0"> No details found</div>
+       <div class="row" *ngIf ="postLikeDetails.length > 0">
+       <div class="input-group h-40" *ngFor="let litem of postLikeDetails">
+            <div class="dropdown-list-image mr-3 mt--15">
+               <img src="{{litem.imageProfile | replaceImg40}}" onerror="this.src='assets/files/profilePics/blank.png';" class="img-fluid mt-2 rounded-circle" alt="Responsive image">
+               <div class="status-indicator bg-success"></div>
+            </div>
+            <div class="overflow-hidden backgroundGrey">
+               <div class="text-truncate"><a href="" (click)="closeModel(litem.user_id); false;">{{litem.firstName}} {{litem.lastName}}</a> liked your post at {{litem.created_at}}</div>
+            </div>
+         </div>
+         <hr>
+      </div>
+      
+
+   
+   
+     </div>  
+   
+     <div class="modal-footer">  
+   
+       <button type="button" class="btn btn-default" (click)="modalRef.hide()">Close</button>  
+   
+     </div>  
+   
+   </ng-template> 
+

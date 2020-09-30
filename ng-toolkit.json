@@ -1,0 +1,15 @@
+{
+  "serverless": {
+    "provider": "aws",
+    "project": "fhapp",
+    "skipInstall": false,
+    "directory": ".",
+    "lambdaTS": false,
+    "offline": false,
+    "clientProject": "fhapp",
+    "serverless": {
+      "aws": {},
+      "gcloud": {}
+    }
+  }
+}
