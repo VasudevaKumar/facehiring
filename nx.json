@@ -33,16 +33,7 @@
       "tags": [],
       "implicitDependencies": ["profile"]
     },
-    "header": {
-      "tags": []
-    },
     "headerwithoutsearch": {
-      "tags": []
-    },
-    "headerwithsearch": {
-      "tags": []
-    },
-    "topsection": {
       "tags": []
     },
     "employee": {

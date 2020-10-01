@@ -113,15 +113,15 @@
     "eslint": "6.8.0",
     "jest": "26.2.2",
     "jest-preset-angular": "8.2.1",
+    "opencollective": "^1.0.3",
     "prettier": "2.0.4",
+    "serverless": "^1.60.0",
+    "serverless-apigw-binary": "^0.4.4",
     "ts-jest": "26.1.4",
+    "ts-loader": "^6.2.2",
     "ts-node": "~7.0.0",
     "tslint": "~6.0.0",
     "typescript": "~3.9.7",
-    "ts-loader": "^6.2.1",
-    "webpack-cli": "^3.3.10",
-    "opencollective": "^1.0.3",
-    "serverless": "^1.60.0",
-    "serverless-apigw-binary": "^0.4.4"
+    "webpack-cli": "^3.3.10"
   }
 }
